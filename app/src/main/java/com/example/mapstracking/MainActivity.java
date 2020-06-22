@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.google_map);
         client = LocationServices.getFusedLocationProviderClient(this);
 
@@ -50,12 +49,12 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(final Location location) {
                 if (location != null){
                     supportMapFragment.getMapAsync(new OnMapReadyCallback() {
+                        @SuppressLint("MissingPermission")
                         @Override
                         public void onMapReady(GoogleMap googleMap) {
                             LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
+                            googleMap.setMyLocationEnabled(true);
                             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
-                            googleMap.addMarker(new MarkerOptions().position(latLng).title("Current Location"));
-
                         }
                     });
                 }
