@@ -45,13 +45,15 @@ public class MainActivity extends AppCompatActivity {
     ApiInterface apiInterface;
     double currentLatitude;
     double currentLongitude;
+    double lastLatitude;
+    double lastLongitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.google_map);
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
         final Handler handler = new Handler();
         final int count = 0;
         final Runnable run = new Runnable() {
@@ -66,9 +68,6 @@ public class MainActivity extends AppCompatActivity {
         handler.post(run);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
-        } else {
-            enableMyLocation();
-            getCurrentLocation();
         }
         supportMapFragment.getMapAsync(new OnMapReadyCallback() {
             @SuppressLint("MissingPermission")
@@ -90,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getCurrentLocation(){
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         @SuppressLint("MissingPermission")
         Task<Location> task = fusedLocationProviderClient.getLastLocation();
         task.addOnSuccessListener(new OnSuccessListener<Location>() {
@@ -100,10 +100,18 @@ public class MainActivity extends AppCompatActivity {
                     currentLongitude = location.getLongitude();
                     latLng = new LatLng(currentLatitude,currentLongitude);
                     map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
-                    saveLocation();
+                    if (lastLatitude == 0.0d && lastLongitude == 0.0d ){
+                        saveLocation();
+                    } else {
+                        if (currentLatitude != lastLatitude && currentLongitude != lastLongitude) {
+                            saveLocation();
+                        }
+                    }
                 }
             }
         });
+        lastLatitude = currentLatitude;
+        lastLongitude = currentLongitude;
     }
 
     public void saveLocation(){
@@ -133,9 +141,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        getCurrentLocation();
-    }
 }
