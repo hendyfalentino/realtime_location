@@ -10,8 +10,12 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.TextView;
 
+import com.example.mapstracking.API.ApiClient;
+import com.example.mapstracking.API.ApiInterface;
+import com.example.mapstracking.Model.CurrentLocation;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -23,6 +27,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MainActivity extends AppCompatActivity {
 
     LatLng latLng;
@@ -32,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvDuration, tvDistance;
     SupportMapFragment supportMapFragment;
     FusedLocationProviderClient fusedLocationProviderClient;
+    ApiInterface apiInterface;
+    double currentLatitude;
+    double currentLongitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,9 +96,29 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Location location) {
                 if (location != null){
-                    latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    currentLatitude = location.getLatitude();
+                    currentLongitude = location.getLongitude();
+                    latLng = new LatLng(currentLatitude,currentLongitude);
                     map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
+                    saveLocation();
                 }
+            }
+        });
+    }
+
+    public void saveLocation(){
+        apiInterface = ApiClient.getRetrofitInstance().create(ApiInterface.class);
+        Call<List<CurrentLocation>> call = apiInterface.saveCurrentLocation(currentLatitude, currentLongitude);
+        call.enqueue(new Callback<List<CurrentLocation>>() {
+            @Override
+            public void onResponse(Call<List<CurrentLocation>> call, Response<List<CurrentLocation>> response) {
+                Log.d("getData", String.valueOf(response.isSuccessful()));
+                Log.d("getData", String.valueOf(response.message()));
+            }
+
+            @Override
+            public void onFailure(Call<List<CurrentLocation>> call, Throwable t) {
+                Log.d("getData", t.toString());
             }
         });
     }

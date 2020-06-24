@@ -1,4 +1,4 @@
-package com.example.mapstracking;
+package com.example.mapstracking.Model;
 
 import com.google.gson.annotations.SerializedName;
 
