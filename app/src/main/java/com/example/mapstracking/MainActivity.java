@@ -6,66 +6,54 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.job.JobInfo;
+import android.content.ComponentName;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.widget.TextView;
 
-import com.example.mapstracking.API.ApiClient;
-import com.example.mapstracking.API.ApiInterface;
-import com.example.mapstracking.Model.CurrentLocation;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
+import com.example.mapstracking.Service.BackgroundService;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    LatLng latLng;
+
     GoogleMap map;
     private LatLng marker1 = new LatLng(1.5050588, 124.8727851);
     private LatLng marker2 = new LatLng(1.49642737355, 124.878909588);
     private TextView tvDuration, tvDistance;
     SupportMapFragment supportMapFragment;
-    FusedLocationProviderClient fusedLocationProviderClient;
-    ApiInterface apiInterface;
-    double currentLatitude;
-    double currentLongitude;
-    double lastLatitude;
-    double lastLongitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.google_map);
-
+        /*
         final Handler handler = new Handler();
         final int count = 0;
         final Runnable run = new Runnable() {
             @Override
             public void run() {
-                getCurrentLocation();
+                Method.getCurrentLocation();
                 if(count != 1) {
                     handler.postDelayed(this, 3000);
                 }
             }
         };
         handler.post(run);
+         */
+
+        ComponentName componentName = new ComponentName(this, BackgroundService.class);
+        JobInfo info = new JobInfo().Builder
+
+        https://www.youtube.com/watch?v=3EQWmME-hNA
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
         }
@@ -88,55 +76,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void getCurrentLocation(){
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        @SuppressLint("MissingPermission")
-        Task<Location> task = fusedLocationProviderClient.getLastLocation();
-        task.addOnSuccessListener(new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if (location != null){
-                    currentLatitude = location.getLatitude();
-                    currentLongitude = location.getLongitude();
-                    latLng = new LatLng(currentLatitude,currentLongitude);
-                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
-                    if (lastLatitude == 0.0d && lastLongitude == 0.0d ){
-                        saveLocation();
-                    } else {
-                        if (currentLatitude != lastLatitude && currentLongitude != lastLongitude) {
-                            saveLocation();
-                        }
-                    }
-                }
-            }
-        });
-        lastLatitude = currentLatitude;
-        lastLongitude = currentLongitude;
-    }
-
-    public void saveLocation(){
-        apiInterface = ApiClient.getRetrofitInstance().create(ApiInterface.class);
-        Call<List<CurrentLocation>> call = apiInterface.saveCurrentLocation(currentLatitude, currentLongitude);
-        call.enqueue(new Callback<List<CurrentLocation>>() {
-            @Override
-            public void onResponse(Call<List<CurrentLocation>> call, Response<List<CurrentLocation>> response) {
-                Log.d("getData", String.valueOf(response.isSuccessful()));
-                Log.d("getData", String.valueOf(response.message()));
-            }
-
-            @Override
-            public void onFailure(Call<List<CurrentLocation>> call, Throwable t) {
-                Log.d("getData", t.toString());
-            }
-        });
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == 44) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 enableMyLocation();
-                getCurrentLocation();
+                Method.getCurrentLocation();
             }
         }
     }
