@@ -1,11 +1,14 @@
 package com.example.mapstracking.API;
 
 import com.example.mapstracking.Model.CurrentLocation;
+import com.example.mapstracking.Model.ErrorModel;
 import com.example.mapstracking.Model.MapDistance;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -16,7 +19,7 @@ public interface ApiInterface {
 
     @GET("maps/api/distancematrix/json?")
     Call<List<MapDistance>> getDistance (
-            @Field("distance") String distance
+            @Query("distance") String distance
     );
 
     @FormUrlEncoded
@@ -26,4 +29,10 @@ public interface ApiInterface {
             @Field("location_longitude") double location_longitude
     );
 
+    @FormUrlEncoded
+    @POST("login.php")
+    Call<ErrorModel>loginRequest(
+            @Field("user_id") String user_id,
+            @Field("user_password") String user_password
+    );
 }

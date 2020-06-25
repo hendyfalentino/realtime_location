@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.example.mapstracking.API.ApiClient;
 import com.example.mapstracking.API.ApiInterface;
 import com.example.mapstracking.Model.CurrentLocation;
+import com.example.mapstracking.userHandler.SessionManager;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -27,6 +28,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -35,6 +37,7 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
+    SessionManager sessionManager;
     LatLng latLng;
     GoogleMap map;
     private LatLng marker1 = new LatLng(1.5050588, 124.8727851);
@@ -53,7 +56,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.google_map);
-
+        sessionManager = new SessionManager(this);
+        sessionManager.checkLogIn();
+        HashMap<String, String> hashMap = sessionManager.getUserDetail();
+        Bundle bundle = new Bundle();
+        String user_id = hashMap.get(sessionManager.user_id);
+        bundle.putString("user_id", user_id);
         final Handler handler = new Handler();
         final int count = 0;
         final Runnable run = new Runnable() {
