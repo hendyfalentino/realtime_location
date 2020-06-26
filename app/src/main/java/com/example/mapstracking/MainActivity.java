@@ -6,16 +6,23 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mapstracking.API.ApiClient;
 import com.example.mapstracking.API.ApiInterface;
 import com.example.mapstracking.Model.CurrentLocation;
+import com.example.mapstracking.userHandler.LoginActivity;
+import com.example.mapstracking.userHandler.LogoutActivity;
+import com.example.mapstracking.userHandler.SessionActivity;
 import com.example.mapstracking.userHandler.SessionManager;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -28,6 +35,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 
@@ -42,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
     GoogleMap map;
     private LatLng marker1 = new LatLng(1.5050588, 124.8727851);
     private LatLng marker2 = new LatLng(1.49642737355, 124.878909588);
-    private TextView tvDuration, tvDistance;
     SupportMapFragment supportMapFragment;
     FusedLocationProviderClient fusedLocationProviderClient;
     ApiInterface apiInterface;
@@ -50,18 +57,20 @@ public class MainActivity extends AppCompatActivity {
     double currentLongitude;
     double lastLatitude;
     double lastLongitude;
+    String user_id;
+    TextView textView;
+    private Button btn_logout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.google_map);
         sessionManager = new SessionManager(this);
         sessionManager.checkLogIn();
-        HashMap<String, String> hashMap = sessionManager.getUserDetail();
-        Bundle bundle = new Bundle();
-        String user_id = hashMap.get(sessionManager.user_id);
-        bundle.putString("user_id", user_id);
+        HashMap<String, String> user = sessionManager.getUserDetail();
+        user_id = user.get(SessionManager.user_id);
         final Handler handler = new Handler();
         final int count = 0;
         final Runnable run = new Runnable() {
@@ -87,6 +96,16 @@ public class MainActivity extends AppCompatActivity {
                 map.addMarker(new MarkerOptions().position(marker2).title("Marker 2"));
             }
         });
+        textView = findViewById(R.id.tvDuration);
+        btn_logout = findViewById(R.id.btn_logout);
+        btn_logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, LogoutActivity.class);
+                startActivity(intent);
+            }
+        });
+        textView.setText(user_id);
     }
 
     @SuppressLint("MissingPermission")
@@ -105,7 +124,9 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(Location location) {
                 if (location != null){
                     currentLatitude = location.getLatitude();
+                    currentLatitude = Double.parseDouble(new DecimalFormat("##.####").format(currentLatitude));
                     currentLongitude = location.getLongitude();
+                    currentLongitude = Double.parseDouble(new DecimalFormat("##.####").format(currentLongitude));
                     latLng = new LatLng(currentLatitude,currentLongitude);
                     map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
                     if (lastLatitude == 0.0d && lastLongitude == 0.0d ){
@@ -124,12 +145,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void saveLocation(){
         apiInterface = ApiClient.getRetrofitInstance().create(ApiInterface.class);
-        Call<List<CurrentLocation>> call = apiInterface.saveCurrentLocation(currentLatitude, currentLongitude);
+        Call<List<CurrentLocation>> call = apiInterface.saveCurrentLocation(currentLatitude, currentLongitude, user_id);
         call.enqueue(new Callback<List<CurrentLocation>>() {
             @Override
             public void onResponse(Call<List<CurrentLocation>> call, Response<List<CurrentLocation>> response) {
-                Log.d("getData", String.valueOf(response.isSuccessful()));
-                Log.d("getData", String.valueOf(response.message()));
+
             }
 
             @Override

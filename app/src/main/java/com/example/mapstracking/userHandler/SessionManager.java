@@ -13,10 +13,9 @@ public class SessionManager {
     public SharedPreferences.Editor editor;
     public Context context;
     int PRIVATE_MODE = 0 ;
-    public static String url = "http://carexports.uk/wan_api/v1/userHandler/";
     private static final String PREF_NAME = "LOGIN";
     private static final String LOGIN = "IS_LOGIN";
-    public static final String user_id = "user_id";
+    public static String user_id = "user_id";
 
     public SessionManager(Context context) {
         this.context = context;

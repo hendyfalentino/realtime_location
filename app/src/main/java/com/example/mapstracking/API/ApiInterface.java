@@ -6,9 +6,7 @@ import com.example.mapstracking.Model.MapDistance;
 
 import java.util.List;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Response;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -26,12 +24,13 @@ public interface ApiInterface {
     @POST("saveCurrentLocation.php")
     Call<List<CurrentLocation>> saveCurrentLocation(
             @Field("location_latitude") double location_latitude,
-            @Field("location_longitude") double location_longitude
+            @Field("location_longitude") double location_longitude,
+            @Field("user_id") String user_id
     );
 
     @FormUrlEncoded
     @POST("login.php")
-    Call<ErrorModel>loginRequest(
+    Call<ErrorModel> loginRequest(
             @Field("user_id") String user_id,
             @Field("user_password") String user_password
     );
