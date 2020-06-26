@@ -17,4 +17,16 @@ public class ErrorModel {
     @Expose
     String user_id;
 
+    public String getUser_password() {
+        return user_password;
+    }
+
+    public void setUser_password(String user_password) {
+        this.user_password = user_password;
+    }
+
+    @SerializedName("user_password")
+    @Expose
+    String user_password;
+
 }

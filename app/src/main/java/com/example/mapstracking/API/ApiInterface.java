@@ -28,10 +28,9 @@ public interface ApiInterface {
             @Field("user_id") String user_id
     );
 
-    @FormUrlEncoded
-    @POST("login.php")
+    @GET("login.php")
     Call<ErrorModel> loginRequest(
-            @Field("user_id") String user_id,
-            @Field("user_password") String user_password
+            @Query("user_id") String user_id,
+            @Query("user_password") String user_password
     );
 }
