@@ -50,11 +50,11 @@ import retrofit2.Response;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, TaskLoadedCallback, GoogleMap.OnMarkerClickListener {
 
-    GoogleApiClient googleApiClient;
     private GoogleMap mMap;
     LatLng latLng;
     private LatLng marker1 = new LatLng(1.5050588, 124.8727851);
     private LatLng marker2 = new LatLng(1.4124, 124.9878);
+    private LatLng marker3 = new LatLng(1.4915238, 124.8380605);
     FusedLocationProviderClient fusedLocationProviderClient;
     double currentLatitude;
     double currentLongitude;
@@ -63,7 +63,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     ApiInterface apiInterface;
     String user_id = "1";
     private Polyline currentPolyline;
-    Button getDirection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +95,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         enableMyLocation();
         mMap.addMarker(new MarkerOptions().position(marker1).title("Marker 1"));
         mMap.addMarker(new MarkerOptions().position(marker2).title("Marker 2"));
+        mMap.addMarker(new MarkerOptions().position(marker3).title("Marker 3"));
         mMap.setOnMarkerClickListener(this);
     }
 
