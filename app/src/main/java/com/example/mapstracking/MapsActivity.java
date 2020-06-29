@@ -21,6 +21,7 @@ import com.example.mapstracking.API.ApiInterface;
 import com.example.mapstracking.Model.CurrentLocation;
 import com.example.mapstracking.directionhelpers.FetchURL;
 import com.example.mapstracking.directionhelpers.TaskLoadedCallback;
+import com.example.mapstracking.userHandler.SessionManager;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -42,6 +43,7 @@ import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -61,8 +63,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     double lastLatitude;
     double lastLongitude;
     ApiInterface apiInterface;
-    String user_id = "1";
+    String user_id;
     private Polyline currentPolyline;
+    SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +75,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        sessionManager = new SessionManager(this);
+        sessionManager.checkLogIn();
         final Handler handler = new Handler();
         final int count = 0;
         final Runnable run = new Runnable() {
@@ -158,6 +163,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void saveLocation(){
+        HashMap<String, String> user = sessionManager.getUserDetail();
+        user_id = user.get(SessionManager.user_id);
         apiInterface = ApiClient.getRetrofitInstance().create(ApiInterface.class);
         Call<List<CurrentLocation>> call = apiInterface.saveCurrentLocation(currentLatitude, currentLongitude, user_id);
         call.enqueue(new Callback<List<CurrentLocation>>() {

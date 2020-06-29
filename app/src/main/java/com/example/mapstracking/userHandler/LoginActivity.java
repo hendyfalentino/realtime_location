@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.example.mapstracking.API.ApiClient;
 import com.example.mapstracking.API.ApiInterface;
 import com.example.mapstracking.MainActivity;
+import com.example.mapstracking.MapsActivity;
 import com.example.mapstracking.Model.UserModel;
 import com.example.mapstracking.R;
 
@@ -42,8 +43,6 @@ public class LoginActivity extends AppCompatActivity {
         user_password = findViewById(R.id.user_password);
         btn_login = findViewById(R.id.btn_login);
 
-        uId = user_id.getText().toString();
-        uPass = user_password.getText().toString().trim();
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,18 +64,21 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void Login(){
+        uId = user_id.getText().toString();
+        uPass = user_password.getText().toString().trim();
         apiInterface = ApiClient.getRetrofitInstance().create(ApiInterface.class);
         Call<UserModel> call = apiInterface.loginRequest(uId, uPass);
         call.enqueue(new Callback<UserModel>() {
             @Override
             public void onResponse(Call<UserModel> call, Response<UserModel> response) {
-                if (response.body() != null){
-                    Log.d("getData", response.body().toString());
-                } else {
-                    Log.d("getData", "Null Body");
+                if(response.body() != null){
+                    Log.d("getData", response.body().getUser_id());
+                    sessionManager.createSession(uId);
+                    Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
             }
-
             @Override
             public void onFailure(Call<UserModel> call, Throwable t) {
                 Toast.makeText(LoginActivity.this, ""+t.getMessage(), Toast.LENGTH_SHORT).show();
