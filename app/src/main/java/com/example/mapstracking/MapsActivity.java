@@ -143,9 +143,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     latLng = new LatLng(currentLatitude,currentLongitude);
                     if (lastLatitude == 0.0d && lastLongitude == 0.0d ){
                         saveLocation();
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
                     } else {
                         if (currentLatitude != lastLatitude && currentLongitude != lastLongitude) {
                             saveLocation();
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
                         }
                     }
                 }
