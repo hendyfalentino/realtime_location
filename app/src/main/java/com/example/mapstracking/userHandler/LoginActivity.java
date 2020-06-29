@@ -2,6 +2,7 @@ package com.example.mapstracking.userHandler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,9 +12,13 @@ import android.widget.Toast;
 
 import com.example.mapstracking.API.ApiClient;
 import com.example.mapstracking.API.ApiInterface;
-import com.example.mapstracking.Model.ErrorModel;
+import com.example.mapstracking.MainActivity;
+import com.example.mapstracking.Model.UserModel;
 import com.example.mapstracking.R;
-import com.google.gson.Gson;
+
+import org.json.JSONObject;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -61,21 +66,20 @@ public class LoginActivity extends AppCompatActivity {
 
     private void Login(){
         apiInterface = ApiClient.getRetrofitInstance().create(ApiInterface.class);
-        Call<ErrorModel> call = apiInterface.loginRequest(uId, uPass);
-        call.enqueue(new Callback<ErrorModel>() {
+        Call<UserModel> call = apiInterface.loginRequest(uId, uPass);
+        call.enqueue(new Callback<UserModel>() {
             @Override
-            public void onResponse(Call<ErrorModel> call, Response<ErrorModel> response) {
-                String data = response.toString();
-                Log.d("getData", data);
-                //sessionManager.createSession(user_id.getText().toString());
-                //Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                //startActivity(intent);
-                //finish();
+            public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+                if (response.body() != null){
+                    Log.d("getData", response.body().toString());
+                } else {
+                    Log.d("getData", "Null Body");
+                }
             }
 
             @Override
-            public void onFailure(Call<ErrorModel> call, Throwable t) {
-                Toast.makeText(LoginActivity.this, "Error",Toast.LENGTH_LONG).show();
+            public void onFailure(Call<UserModel> call, Throwable t) {
+                Toast.makeText(LoginActivity.this, ""+t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

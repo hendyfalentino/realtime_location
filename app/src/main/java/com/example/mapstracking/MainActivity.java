@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
         supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.google_map);
         sessionManager = new SessionManager(this);
+        sessionManager.createSession("1"); //Temporary
         sessionManager.checkLogIn();
         HashMap<String, String> user = sessionManager.getUserDetail();
         user_id = user.get(SessionManager.user_id);
@@ -96,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 map.addMarker(new MarkerOptions().position(marker2).title("Marker 2"));
             }
         });
-        textView = findViewById(R.id.tvDuration);
+        /*
         btn_logout = findViewById(R.id.btn_logout);
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        textView.setText(user_id);
+        */
     }
 
     @SuppressLint("MissingPermission")
@@ -170,3 +171,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
 }
+/*
+<LinearLayout
+        android:id="@+id/panelInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/white">
+        <TextView
+            android:id="@+id/tvDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"/>
+        <Button
+            android:id="@+id/btn_logout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="25dp"
+            android:layout_centerVertical="true"
+            android:text="Logout" />
+    </LinearLayout>
+ */

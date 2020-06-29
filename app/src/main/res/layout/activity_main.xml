@@ -11,26 +11,4 @@
         android:id="@+id/google_map"
         android:name="com.google.android.gms.maps.SupportMapFragment"/>
 
-    <LinearLayout
-        android:id="@+id/panelInfo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:orientation="vertical"
-        android:layout_alignParentBottom="true"
-        android:background="@android:color/white">
-        <TextView
-            android:id="@+id/tvDuration"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"/>
-        <Button
-            android:id="@+id/btn_logout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginTop="25dp"
-            android:layout_centerVertical="true"
-            android:text="Logout" />
-    </LinearLayout>
 </RelativeLayout>

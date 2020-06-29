@@ -3,7 +3,7 @@ package com.example.mapstracking.Model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ErrorModel {
+public class UserModel {
 
     public String getUser_id() {
         return user_id;

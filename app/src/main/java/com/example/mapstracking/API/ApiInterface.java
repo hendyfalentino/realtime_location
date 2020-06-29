@@ -1,8 +1,10 @@
 package com.example.mapstracking.API;
 
 import com.example.mapstracking.Model.CurrentLocation;
-import com.example.mapstracking.Model.ErrorModel;
+import com.example.mapstracking.Model.UserModel;
 import com.example.mapstracking.Model.MapDistance;
+
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -29,7 +31,7 @@ public interface ApiInterface {
     );
 
     @GET("login.php")
-    Call<ErrorModel> loginRequest(
+    Call<UserModel> loginRequest(
             @Query("user_id") String user_id,
             @Query("user_password") String user_password
     );
