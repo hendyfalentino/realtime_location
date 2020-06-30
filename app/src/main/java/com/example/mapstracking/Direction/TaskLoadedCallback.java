@@ -1,4 +1,4 @@
-package com.example.mapstracking.directionhelpers;
+package com.example.mapstracking.Direction;
 /**
  * Created by Vishal on 10/20/2018.
  */

@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,12 +13,8 @@ import com.example.mapstracking.API.ApiClient;
 import com.example.mapstracking.API.ApiInterface;
 import com.example.mapstracking.MainActivity;
 import com.example.mapstracking.MapsActivity;
-import com.example.mapstracking.Model.UserModel;
+import com.example.mapstracking.Model.User;
 import com.example.mapstracking.R;
-
-import org.json.JSONObject;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -67,20 +62,21 @@ public class LoginActivity extends AppCompatActivity {
         uId = user_id.getText().toString();
         uPass = user_password.getText().toString().trim();
         apiInterface = ApiClient.getRetrofitInstance().create(ApiInterface.class);
-        Call<UserModel> call = apiInterface.loginRequest(uId, uPass);
-        call.enqueue(new Callback<UserModel>() {
+        Call<User> call = apiInterface.loginRequest(uId, uPass);
+        call.enqueue(new Callback<User>() {
             @Override
-            public void onResponse(Call<UserModel> call, Response<UserModel> response) {
-                if(response.body() != null){
-                    Log.d("getData", response.body().getUser_id());
+            public void onResponse(Call<User> call, Response<User> response) {
+                if(response.body() != null) {
                     sessionManager.createSession(uId);
-                    Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
+                } else {
+                    Toast.makeText(LoginActivity.this, "User tidak ditemukan", Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
-            public void onFailure(Call<UserModel> call, Throwable t) {
+            public void onFailure(Call<User> call, Throwable t) {
                 Toast.makeText(LoginActivity.this, ""+t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

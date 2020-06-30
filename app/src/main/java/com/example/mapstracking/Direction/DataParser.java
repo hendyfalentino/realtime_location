@@ -1,4 +1,4 @@
-package com.example.mapstracking.directionhelpers;
+package com.example.mapstracking.Direction;
 
 import com.google.android.gms.maps.model.LatLng;
 

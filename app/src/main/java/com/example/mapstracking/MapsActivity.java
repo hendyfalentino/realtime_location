@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -13,23 +14,20 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.mapstracking.API.ApiClient;
 import com.example.mapstracking.API.ApiInterface;
-import com.example.mapstracking.Model.CurrentLocation;
-import com.example.mapstracking.directionhelpers.FetchURL;
-import com.example.mapstracking.directionhelpers.TaskLoadedCallback;
+import com.example.mapstracking.Direction.FetchURL;
+import com.example.mapstracking.Direction.TaskLoadedCallback;
+import com.example.mapstracking.Model.DestinationLocation;
+import com.example.mapstracking.userHandler.LogoutActivity;
 import com.example.mapstracking.userHandler.SessionManager;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -39,13 +37,11 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
-import org.w3c.dom.Text;
-
 import java.text.DecimalFormat;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -54,9 +50,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     LatLng latLng;
-    private LatLng marker1 = new LatLng(1.5050588, 124.8727851);
-    private LatLng marker2 = new LatLng(1.4124, 124.9878);
-    private LatLng marker3 = new LatLng(1.4915238, 124.8380605);
     FusedLocationProviderClient fusedLocationProviderClient;
     double currentLatitude;
     double currentLongitude;
@@ -66,17 +59,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     String user_id;
     private Polyline currentPolyline;
     SessionManager sessionManager;
+    int i, j;
+    String[][] destLoc;
+    LatLng[] destLatLng;
+    Marker[] markers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        sessionManager = new SessionManager(this);
+        getDestinationMarker();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        sessionManager = new SessionManager(this);
-        sessionManager.checkLogIn();
         final Handler handler = new Handler();
         final int count = 0;
         final Runnable run = new Runnable() {
@@ -98,15 +95,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         enableMyLocation();
-        mMap.addMarker(new MarkerOptions().position(marker1).title("Marker 1"));
-        mMap.addMarker(new MarkerOptions().position(marker2).title("Marker 2"));
-        mMap.addMarker(new MarkerOptions().position(marker3).title("Marker 3"));
         mMap.setOnMarkerClickListener(this);
     }
 
     @Override
     public boolean onMarkerClick(final Marker marker) {
 
+        marker.hideInfoWindow();
         Location loc1 = new Location("loc1");
         loc1.setLatitude(latLng.latitude);
         loc1.setLongitude(latLng.longitude);
@@ -115,12 +110,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         loc2.setLongitude(marker.getPosition().longitude);
         float distance = loc1.distanceTo(loc2);
 
-        if(currentPolyline != null){
-            currentPolyline.remove();
-        }
-        if(distance<10){
+        if (distance < 30 && marker.getTag() == "FALSE") {
+            String markerTitle = marker.getTitle();
+            changeDestLocStatus(markerTitle);
             marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
         } else {
+            if (currentPolyline != null) {
+                currentPolyline.remove();
+            }
             new FetchURL(MapsActivity.this).execute(getUrl(latLng, marker.getPosition(), "driving"), "driving");
         }
         return false;
@@ -166,17 +163,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         HashMap<String, String> user = sessionManager.getUserDetail();
         user_id = user.get(SessionManager.user_id);
         apiInterface = ApiClient.getRetrofitInstance().create(ApiInterface.class);
-        Call<List<CurrentLocation>> call = apiInterface.saveCurrentLocation(currentLatitude, currentLongitude, user_id);
-        call.enqueue(new Callback<List<CurrentLocation>>() {
+        Call<ResponseBody> call = apiInterface.saveCurrentLocation(currentLatitude, currentLongitude, user_id);
+        call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<List<CurrentLocation>> call, Response<List<CurrentLocation>> response) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
             }
 
             @Override
-            public void onFailure(Call<List<CurrentLocation>> call, Throwable t) {
-                Log.d("getData", t.toString());
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
             }
+
         });
     }
 
@@ -208,8 +206,70 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onTaskDone(Object... values) {
-        if (currentPolyline != null)
-            currentPolyline.remove();
         currentPolyline = mMap.addPolyline((PolylineOptions) values[0]);
+    }
+
+    public void getDestinationMarker(){
+        HashMap<String, String> user = sessionManager.getUserDetail();
+        user_id = user.get(SessionManager.user_id);
+        apiInterface = ApiClient.getRetrofitInstance().create(ApiInterface.class);
+        Call<List<DestinationLocation>> call = apiInterface.getDestLoc(user_id);
+        call.enqueue(new Callback<List<DestinationLocation>>() {
+            @Override
+            public void onResponse(Call<List<DestinationLocation>> call, Response<List<DestinationLocation>> response) {
+                if(response.body() != null){
+                    int size = response.body().size();
+                    destLoc = new String[size][4];
+                    for(i=0 ; i<size; i++){
+                        for(j=0 ; j<4; j++){
+                            if(j==0){
+                                destLoc[i][j] = response.body().get(i).getDest_loc_id();
+                            }else if(j==1){
+                                destLoc[i][j] = response.body().get(i).getDest_loc_lat();
+                            }else if(j==2){
+                                destLoc[i][j] = response.body().get(i).getDest_loc_lng();
+                            }else if(j==3){
+                                destLoc[i][j] = response.body().get(i).getDest_loc_status();
+                            }
+                        }
+                    }
+                    for(i=0; i<size; i++){
+                        markers = new Marker[size];
+                        destLatLng = new LatLng[size];
+                        destLatLng[i] = new LatLng(Double.parseDouble(destLoc[i][1]), Double.parseDouble(destLoc[i][2]));
+                        if(destLoc[i][3].equals("FALSE")){
+                            markers[i] = mMap.addMarker(new MarkerOptions().position(destLatLng[i]).title(destLoc[i][0]));
+                            markers[i].setTag("FALSE");
+                        } else {
+                            markers[i] = mMap.addMarker(new MarkerOptions().position(destLatLng[i]).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).title(destLoc[i][0]));
+                            markers[i].setTag("TRUE");
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<DestinationLocation>> call, Throwable t) {
+                Log.d("getData", t.toString());
+            }
+        });
+    }
+
+    public void changeDestLocStatus(String id){
+        apiInterface = ApiClient.getRetrofitInstance().create(ApiInterface.class);
+        Call<ResponseBody> call = apiInterface.updDestLocStat(id);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Log.d("getData", response.message());
+                Log.d("getData", response.toString());
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d("getData", t.toString());
+            }
+
+        });
     }
 }

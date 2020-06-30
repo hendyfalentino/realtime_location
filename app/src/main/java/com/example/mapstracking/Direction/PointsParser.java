@@ -1,4 +1,4 @@
-package com.example.mapstracking.directionhelpers;
+package com.example.mapstracking.Direction;
 
 import android.content.Context;
 import android.graphics.Color;

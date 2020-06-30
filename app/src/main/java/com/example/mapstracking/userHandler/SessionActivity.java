@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.example.mapstracking.MainActivity;
+import com.example.mapstracking.MapsActivity;
 import com.example.mapstracking.R;
 
 public class SessionActivity extends AppCompatActivity {
@@ -20,8 +21,6 @@ public class SessionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_session);
 
         sessionManager = new SessionManager(this);
-
-        setContentView(R.layout.activity_main);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

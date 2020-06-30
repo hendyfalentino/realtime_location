@@ -39,15 +39,17 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps">
+            android:label="@string/title_activity_maps"
+            android:parentActivityName=".MainActivity">
         </activity>
-        <activity android:name=".userHandler.SessionActivity"></activity>
-        <activity android:name=".userHandler.LoginActivity">
+        <activity android:name=".userHandler.SessionActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".userHandler.LoginActivity">
         </activity>
         <activity android:name=".userHandler.LogoutActivity" />
         <activity android:name=".MainActivity">
