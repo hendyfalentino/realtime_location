@@ -6,23 +6,22 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 
 import com.example.mapstracking.API.ApiClient;
 import com.example.mapstracking.API.ApiInterface;
 import com.example.mapstracking.Direction.FetchURL;
 import com.example.mapstracking.Direction.TaskLoadedCallback;
 import com.example.mapstracking.Model.DestinationLocation;
-import com.example.mapstracking.userHandler.LogoutActivity;
+import com.example.mapstracking.Service.LocationService;
 import com.example.mapstracking.userHandler.SessionManager;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -51,29 +50,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     LatLng latLng;
     FusedLocationProviderClient fusedLocationProviderClient;
-    double currentLatitude;
-    double currentLongitude;
-    double lastLatitude;
-    double lastLongitude;
+    SessionManager sessionManager;
     ApiInterface apiInterface;
     String user_id;
     private Polyline currentPolyline;
-    SessionManager sessionManager;
     int i, j;
     String[][] destLoc;
     LatLng[] destLatLng;
     Marker[] markers;
+    double currentLatitude;
+    double currentLongitude;
+    double lastLatitude;
+    double lastLongitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        sessionManager = new SessionManager(this);
-        getDestinationMarker();
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        MapFragment mapFragment = (MapFragment) getFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
         final Handler handler = new Handler();
         final int count = 0;
         final Runnable run = new Runnable() {
@@ -86,6 +77,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         };
         handler.post(run);
+        sessionManager = new SessionManager(this);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_maps);
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        MapFragment mapFragment = (MapFragment) getFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(MapsActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
         }
@@ -95,12 +93,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         enableMyLocation();
+        getCurrentLocation();
+        getDestinationMarker();
         mMap.setOnMarkerClickListener(this);
     }
 
     @Override
     public boolean onMarkerClick(final Marker marker) {
-
         marker.hideInfoWindow();
         Location loc1 = new Location("loc1");
         loc1.setLatitude(latLng.latitude);
@@ -118,7 +117,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (currentPolyline != null) {
                 currentPolyline.remove();
             }
-            new FetchURL(MapsActivity.this).execute(getUrl(latLng, marker.getPosition(), "driving"), "driving");
+            new FetchURL(MapsActivity.this).execute(getUrl(latLng, marker.getPosition()), "driving");
         }
         return false;
     }
@@ -142,39 +141,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     currentLatitude = Double.parseDouble(new DecimalFormat("##.####").format(currentLatitude));
                     currentLongitude = location.getLongitude();
                     currentLongitude = Double.parseDouble(new DecimalFormat("##.####").format(currentLongitude));
-                    latLng = new LatLng(currentLatitude,currentLongitude);
+                    latLng = new LatLng(currentLatitude, currentLongitude);
                     if (lastLatitude == 0.0d && lastLongitude == 0.0d ){
-                        saveLocation();
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
-                    } else {
-                        if (currentLatitude != lastLatitude && currentLongitude != lastLongitude) {
-                            saveLocation();
-                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
-                        }
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
+                    } else if (currentLatitude != lastLatitude && currentLongitude != lastLongitude) {
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
                     }
                 }
+                lastLatitude = currentLatitude;
+                lastLongitude = currentLongitude;
             }
-        });
-        lastLatitude = currentLatitude;
-        lastLongitude = currentLongitude;
-    }
-
-    public void saveLocation(){
-        HashMap<String, String> user = sessionManager.getUserDetail();
-        user_id = user.get(SessionManager.user_id);
-        apiInterface = ApiClient.getRetrofitInstance().create(ApiInterface.class);
-        Call<ResponseBody> call = apiInterface.saveCurrentLocation(currentLatitude, currentLongitude, user_id);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-            }
-
         });
     }
 
@@ -188,20 +164,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    private String getUrl(LatLng origin, LatLng dest, String directionMode) {
+    private String getUrl(LatLng origin, LatLng dest) {
         // Origin of route
         String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
         // Destination of route
         String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
         // Mode
-        String mode = "mode=" + directionMode;
+        String mode = "mode=" + "driving";
         // Building the parameters to the web service
         String parameters = str_origin + "&" + str_dest + "&" + mode;
         // Output format
         String output = "json";
         // Building the url to the web service
-        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=" + getString(R.string.google_maps_key);
-        return url;
+        return "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=" + getString(R.string.google_maps_key);
     }
 
     @Override
@@ -261,13 +236,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Log.d("getData", response.message());
-                Log.d("getData", response.toString());
+
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.d("getData", t.toString());
+
             }
 
         });
