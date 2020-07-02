@@ -1,12 +1,8 @@
 package com.example.mapstracking;
 
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,14 +10,11 @@ import android.util.Log;
 
 import com.example.mapstracking.API.ApiClient;
 import com.example.mapstracking.API.ApiInterface;
-import com.example.mapstracking.Direction.FetchURL;
-import com.example.mapstracking.Direction.TaskLoadedCallback;
+import com.example.mapstracking.Route.FetchURL;
+import com.example.mapstracking.Route.TaskLoadedCallback;
 import com.example.mapstracking.Model.DestinationLocation;
-import com.example.mapstracking.Service.LocationService;
 import com.example.mapstracking.userHandler.SessionManager;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -58,35 +51,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     String[][] destLoc;
     LatLng[] destLatLng;
     Marker[] markers;
-    double currentLatitude;
-    double currentLongitude;
-    double lastLatitude;
-    double lastLongitude;
+    double currentLatitude, currentLongitude, lastLatitude, lastLongitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         final Handler handler = new Handler();
-        final int count = 0;
         final Runnable run = new Runnable() {
             @Override
             public void run() {
                 getCurrentLocation();
-                if(count != 1) {
-                    handler.postDelayed(this, 3000);
-                }
+                handler.postDelayed(this, 1000);
             }
         };
         handler.post(run);
         sessionManager = new SessionManager(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MapsActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
-        }
     }
 
     @Override
@@ -143,7 +126,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     currentLongitude = Double.parseDouble(new DecimalFormat("##.####").format(currentLongitude));
                     latLng = new LatLng(currentLatitude, currentLongitude);
                     if (lastLatitude == 0.0d && lastLongitude == 0.0d ){
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
                     } else if (currentLatitude != lastLatitude && currentLongitude != lastLongitude) {
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
                     }
@@ -152,16 +135,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 lastLongitude = currentLongitude;
             }
         });
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == 44) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                enableMyLocation();
-                getCurrentLocation();
-            }
-        }
     }
 
     private String getUrl(LatLng origin, LatLng dest) {

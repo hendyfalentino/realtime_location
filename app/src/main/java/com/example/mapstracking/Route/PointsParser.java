@@ -1,4 +1,4 @@
-package com.example.mapstracking.Direction;
+package com.example.mapstracking.Route;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -14,13 +14,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by Vishal on 10/20/2018.
- */
-
 public class PointsParser extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
     TaskLoadedCallback taskCallback;
-    String directionMode = "driving";
+    String directionMode;
 
     public PointsParser(Context mContext, String directionMode) {
         this.taskCallback = (TaskLoadedCallback) mContext;
@@ -36,7 +32,7 @@ public class PointsParser extends AsyncTask<String, Integer, List<List<HashMap<S
 
         try {
             jObject = new JSONObject(jsonData[0]);
-            Log.d("mylog", jsonData[0].toString());
+            Log.d("mylog", jsonData[0]);
             DataParser parser = new DataParser();
             Log.d("mylog", parser.toString());
 
@@ -73,23 +69,12 @@ public class PointsParser extends AsyncTask<String, Integer, List<List<HashMap<S
             }
             // Adding all the points in the route to LineOptions
             lineOptions.addAll(points);
-            if (directionMode.equalsIgnoreCase("walking")) {
-                lineOptions.width(10);
-                lineOptions.color(Color.MAGENTA);
-            } else {
-                lineOptions.width(20);
-                lineOptions.color(Color.BLUE);
-            }
-            Log.d("mylog", "onPostExecute lineoptions decoded");
+            lineOptions.width(15);
+            lineOptions.color(Color.BLUE);
         }
 
-        // Drawing polyline in the Google Map for the i-th route
         if (lineOptions != null) {
-            //mMap.addPolyline(lineOptions);
             taskCallback.onTaskDone(lineOptions);
-
-        } else {
-            Log.d("mylog", "without Polylines drawn");
         }
     }
 }

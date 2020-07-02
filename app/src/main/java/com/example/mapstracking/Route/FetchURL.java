@@ -1,4 +1,4 @@
-package com.example.mapstracking.Direction;
+package com.example.mapstracking.Route;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -10,10 +10,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-/**
- * Created by Vishal on 10/20/2018.
- */
 
 public class FetchURL extends AsyncTask<String, Void, String> {
     Context mContext;
@@ -31,7 +27,7 @@ public class FetchURL extends AsyncTask<String, Void, String> {
         try {
             // Fetching the data from web service
             data = downloadUrl(strings[0]);
-            Log.d("mylog", "Background task data " + data.toString());
+            Log.d("mylog", "Background task data " + data);
         } catch (Exception e) {
             Log.d("Background Task", e.toString());
         }
@@ -60,12 +56,12 @@ public class FetchURL extends AsyncTask<String, Void, String> {
             iStream = urlConnection.getInputStream();
             BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
             StringBuffer sb = new StringBuffer();
-            String line = "";
+            String line;
             while ((line = br.readLine()) != null) {
                 sb.append(line);
             }
             data = sb.toString();
-            Log.d("mylog", "Downloaded URL: " + data.toString());
+            Log.d("mylog", "Downloaded URL: " + data);
             br.close();
         } catch (Exception e) {
             Log.d("mylog", "Exception downloading URL: " + e.toString());

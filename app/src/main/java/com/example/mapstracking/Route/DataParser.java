@@ -1,4 +1,4 @@
-package com.example.mapstracking.Direction;
+package com.example.mapstracking.Route;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -9,10 +9,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-/**
- * Created by Vishal on 10/20/2018.
- */
 
 public class DataParser {
     public List<List<HashMap<String, String>>> parse(JSONObject jObject) {
@@ -33,7 +29,7 @@ public class DataParser {
 
                     /** Traversing all steps */
                     for (int k = 0; k < jSteps.length(); k++) {
-                        String polyline = "";
+                        String polyline;
                         polyline = (String) ((JSONObject) ((JSONObject) jSteps.get(k)).get("polyline")).get("points");
                         List<LatLng> list = decodePoly(polyline);
 
@@ -51,7 +47,7 @@ public class DataParser {
 
         } catch (JSONException e) {
             e.printStackTrace();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         return routes;
     }
