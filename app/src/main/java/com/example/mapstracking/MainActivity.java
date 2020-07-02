@@ -12,8 +12,10 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.view.View;
@@ -46,30 +48,22 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class MainActivity extends AppCompatActivity {
+
+    static MainActivity instance;
+
+    LocationRequest locationRequest;
+    FusedLocationProviderClient fusedLocationProviderClient;
+
+    public static MainActivity getInstance() {
+        return instance;
+    }
 
     SessionManager sessionManager;
     Intent intent;
     Button btn_map, btn_logout, btn_form;
-    boolean Bound = false;
-    LocationService service = null;
+    TextView textView;
 
-    private final ServiceConnection serviceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            LocationService.LocalBinder binder = (LocationService.LocalBinder) iBinder;
-            service = binder.getService();
-            Bound = true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            service = null;
-            Bound = false;
-        }
-    };
-
-    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,13 +71,17 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         sessionManager = new SessionManager(this);
         sessionManager.checkLogIn();
 
+        instance = this;
+
+        updateLocation();
+
+        textView = findViewById(R.id.tv_text);
         btn_map = findViewById(R.id.btn_map);
         btn_logout = findViewById(R.id.btn_logout);
 
         btn_map.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                service.requestLocationUpdates();
                 intent = new Intent(MainActivity.this, MapsActivity.class);
                 startActivity(intent);
             }
@@ -92,16 +90,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //service.removeLocationUpdates();
                 intent = new Intent(MainActivity.this, LogoutActivity.class);
                 startActivity(intent);
+                PendingIntent.getBroadcast(MainActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT).cancel();
             }
         });
-
-        bindService(new Intent(MainActivity.this,
-                        LocationService.class),
-                serviceConnection,
-                Context.BIND_AUTO_CREATE);
 
         btn_form = findViewById(R.id.btn_form);
         btn_form.setOnClickListener(new View.OnClickListener() {
@@ -114,45 +107,35 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        PreferenceManager.getDefaultSharedPreferences(this)
-                .registerOnSharedPreferenceChangeListener(this);
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    protected void onStop() {
-        if (Bound) {
-            unbindService(serviceConnection);
-            Bound = false;
+    private void updateLocation() {
+        buildLocationRequest();
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
         }
-        PreferenceManager.getDefaultSharedPreferences(this)
-                .unregisterOnSharedPreferenceChangeListener(this);
-        EventBus.getDefault().unregister(this);
-        super.onStop();
+        fusedLocationProviderClient.requestLocationUpdates(locationRequest, getPendingIntent());
     }
 
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        if(s.equals(Common.KEY_REQUESTING_LOCATION_UPDATES)){
-            setButtonState(sharedPreferences.getBoolean(Common.KEY_REQUESTING_LOCATION_UPDATES, false));
-        }
+    private PendingIntent getPendingIntent() {
+        Intent intent = new Intent(this, LocationService.class);
+        intent.setAction(LocationService.ACTION_PROCESS_UPDATE);
+        return PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    private void setButtonState(boolean isRequestEnable) {
+    private void buildLocationRequest() {
+        locationRequest = new LocationRequest();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(5000);
+        locationRequest.setFastestInterval(3000);
+        locationRequest.setSmallestDisplacement(10f);
     }
 
-    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public void onListenLocation(SendLocToActivity event){
-        if(event != null){
-            String data = new StringBuilder()
-                    .append(event.getLocation().getLatitude())
-                    .append("/")
-                    .append(event.getLocation().getLongitude())
-                    .toString();
-            Toast.makeText(service, data, Toast.LENGTH_SHORT).show();
-        }
+    public void updateTv(final String value){
+        MainActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                textView.setText(value);
+            }
+        });
     }
 }
