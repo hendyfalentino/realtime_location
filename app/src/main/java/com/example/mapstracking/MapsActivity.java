@@ -12,7 +12,7 @@ import com.example.mapstracking.API.ApiClient;
 import com.example.mapstracking.API.ApiInterface;
 import com.example.mapstracking.Route.FetchURL;
 import com.example.mapstracking.Route.TaskLoadedCallback;
-import com.example.mapstracking.Model.DestinationLocation;
+import com.example.mapstracking.Model.Mapping;
 import com.example.mapstracking.userHandler.SessionManager;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -45,7 +45,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     FusedLocationProviderClient fusedLocationProviderClient;
     SessionManager sessionManager;
     ApiInterface apiInterface;
-    String user_id;
+    String id_petugas;
     private Polyline currentPolyline;
     int i, j;
     String[][] destLoc;
@@ -159,25 +159,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void getDestinationMarker(){
         HashMap<String, String> user = sessionManager.getUserDetail();
-        user_id = user.get(SessionManager.user_id);
+        id_petugas = user.get(SessionManager.id_petugas);
         apiInterface = ApiClient.getRetrofitInstance().create(ApiInterface.class);
-        Call<List<DestinationLocation>> call = apiInterface.getDestLoc(user_id);
-        call.enqueue(new Callback<List<DestinationLocation>>() {
+        Call<List<Mapping>> call = apiInterface.getMapping(id_petugas);
+        call.enqueue(new Callback<List<Mapping>>() {
             @Override
-            public void onResponse(Call<List<DestinationLocation>> call, Response<List<DestinationLocation>> response) {
+            public void onResponse(Call<List<Mapping>> call, Response<List<Mapping>> response) {
                 if(response.body() != null){
                     int size = response.body().size();
                     destLoc = new String[size][4];
                     for(i=0 ; i<size; i++){
                         for(j=0 ; j<4; j++){
                             if(j==0){
-                                destLoc[i][j] = response.body().get(i).getDest_loc_id();
+                                destLoc[i][j] = response.body().get(i).getId_mapping();
                             }else if(j==1){
-                                destLoc[i][j] = response.body().get(i).getDest_loc_lat();
+                                destLoc[i][j] = response.body().get(i).getLatidue_mapping();
                             }else if(j==2){
-                                destLoc[i][j] = response.body().get(i).getDest_loc_lng();
+                                destLoc[i][j] = response.body().get(i).getLongitude_mapping();
                             }else if(j==3){
-                                destLoc[i][j] = response.body().get(i).getDest_loc_status();
+                                destLoc[i][j] = response.body().get(i).getStatus_mapping();
                             }
                         }
                     }
@@ -197,7 +197,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
 
             @Override
-            public void onFailure(Call<List<DestinationLocation>> call, Throwable t) {
+            public void onFailure(Call<List<Mapping>> call, Throwable t) {
                 Log.d("getData", t.toString());
             }
         });
@@ -205,7 +205,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void changeDestLocStatus(String id){
         apiInterface = ApiClient.getRetrofitInstance().create(ApiInterface.class);
-        Call<ResponseBody> call = apiInterface.updDestLocStat(id);
+        Call<ResponseBody> call = apiInterface.setStatusMapping(id);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

@@ -23,7 +23,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LocationService extends BroadcastReceiver {
+public class TrackingService extends BroadcastReceiver {
 
     double currentLatitude;
     double currentLongitude;
@@ -31,7 +31,7 @@ public class LocationService extends BroadcastReceiver {
     double lastLongitude;
     LatLng latLng;
     ApiInterface apiInterface;
-    String user_id;
+    String id_petugas;
 
     public static final String ACTION_PROCESS_UPDATE = "com.example.mapstracking.Service.UPDATE_LOCATION";
 
@@ -39,7 +39,7 @@ public class LocationService extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         SessionManager sessionManager = new SessionManager(context);
         HashMap<String, String> user = sessionManager.getUserDetail();
-        user_id = user.get(SessionManager.user_id);
+        id_petugas = user.get(SessionManager.id_petugas);
         if(intent != null){
             final String action = intent.getAction();
             if(ACTION_PROCESS_UPDATE.equals(action)){
@@ -52,9 +52,9 @@ public class LocationService extends BroadcastReceiver {
                     currentLongitude = Double.parseDouble(new DecimalFormat("##.####").format(currentLongitude));
                     latLng = new LatLng(currentLatitude,currentLongitude);
                     if (lastLatitude == 0.0d && lastLongitude == 0.0d ){
-                        saveLocation(user_id);
+                        saveLocation(id_petugas);
                     } else if (currentLatitude != lastLatitude && currentLongitude != lastLongitude) {
-                        saveLocation(user_id);
+                        saveLocation(id_petugas);
                     }
                 }
                 lastLatitude = currentLatitude;
@@ -65,7 +65,7 @@ public class LocationService extends BroadcastReceiver {
 
     public void saveLocation(String uId){
         apiInterface = ApiClient.getRetrofitInstance().create(ApiInterface.class);
-        Call<ResponseBody> call = apiInterface.saveCurrentLocation(currentLatitude, currentLongitude, uId);
+        Call<ResponseBody> call = apiInterface.saveTracking(currentLatitude, currentLongitude, uId);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

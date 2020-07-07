@@ -1,7 +1,7 @@
 package com.example.mapstracking.API;
 
-import com.example.mapstracking.Model.DestinationLocation;
-import com.example.mapstracking.Model.User;
+import com.example.mapstracking.Model.Mapping;
+import com.example.mapstracking.Model.Petugas;
 
 import java.util.List;
 
@@ -12,26 +12,33 @@ import retrofit2.http.Query;
 
 public interface ApiInterface {
 
-    @GET("saveCurrentLocation.php")
-    Call<ResponseBody> saveCurrentLocation(
-            @Query("location_latitude") double location_latitude,
-            @Query("location_longitude") double location_longitude,
-            @Query("user_id") String user_id
+    @GET("saveTracking.php")
+    Call<ResponseBody> saveTracking(
+            @Query("latitude_tracking") double latitude_tracking,
+            @Query("longitude_tracking") double longitude_tracking,
+            @Query("id_petugas") String id_petugas
     );
 
     @GET("login.php")
-    Call<User> loginRequest(
-            @Query("user_id") String user_id,
-            @Query("user_password") String user_password
+    Call<Petugas> loginRequest(
+            @Query("id_petugas") String id_petugas,
+            @Query("password_petugas") String password_petugas
     );
 
-    @GET("getDestLoc.php")
-    Call<List<DestinationLocation>> getDestLoc(
-            @Query("user_id") String user_id
+    @GET("getMapping.php")
+    Call<List<Mapping>> getMapping(
+            @Query("id_petugas") String id_petugas
     );
 
-    @GET("updDestLocStat.php")
-    Call<ResponseBody> updDestLocStat(
-            @Query("dest_loc_id") String dest_loc_id
+    @GET("setStatusMapping.php")
+    Call<ResponseBody> setStatusMapping(
+            @Query("id_mapping") String id_mapping
+    );
+
+    @GET("insertSetoran.php")
+    Call<ResponseBody> insertSetoran(
+            @Query("jumlah_setoran") String jumlah_setoran,
+            @Query("deskripsi_setoran") String desktipsi_setoran,
+            @Query("id_petugas") String id_petugas
     );
 }

@@ -19,7 +19,7 @@
         android:textSize="60sp" />
 
     <EditText
-        android:id="@+id/user_id"
+        android:id="@+id/id_petugas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
@@ -29,7 +29,7 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <EditText
-        android:id="@+id/user_password"
+        android:id="@+id/password_petugas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"

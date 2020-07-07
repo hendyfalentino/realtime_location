@@ -12,8 +12,7 @@ import android.widget.Toast;
 import com.example.mapstracking.API.ApiClient;
 import com.example.mapstracking.API.ApiInterface;
 import com.example.mapstracking.MainActivity;
-import com.example.mapstracking.MapsActivity;
-import com.example.mapstracking.Model.User;
+import com.example.mapstracking.Model.Petugas;
 import com.example.mapstracking.R;
 
 import retrofit2.Call;
@@ -24,7 +23,7 @@ public class LoginActivity extends AppCompatActivity {
 
     ApiInterface apiInterface;
     SessionManager sessionManager;
-    private EditText user_id, user_password;
+    private EditText id_petugas, password_petugas;
     private Button btn_login;
     String uId;
     String uPass;
@@ -34,8 +33,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         sessionManager = new SessionManager(this);
-        user_id = findViewById(R.id.user_id);
-        user_password = findViewById(R.id.user_password);
+        id_petugas = findViewById(R.id.id_petugas);
+        password_petugas = findViewById(R.id.password_petugas);
         btn_login = findViewById(R.id.btn_login);
 
         btn_login.setOnClickListener(new View.OnClickListener() {
@@ -43,10 +42,10 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 /*
                 if (uId.isEmpty()){
-                    user_id.setError("Please Insert User ID");
+                    id_petugas.setError("Please Insert User ID");
                 }
                 if (uPass.isEmpty()){
-                    user_password.setError("Please Insert Passsword");
+                    password_petugas.setError("Please Insert Passsword");
                 }
                 if(!uId.isEmpty() && !uPass.isEmpty()) {
                     Login(uId, uPass);
@@ -59,13 +58,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void Login(){
-        uId = user_id.getText().toString();
-        uPass = user_password.getText().toString().trim();
+        uId = id_petugas.getText().toString();
+        uPass = password_petugas.getText().toString().trim();
         apiInterface = ApiClient.getRetrofitInstance().create(ApiInterface.class);
-        Call<User> call = apiInterface.loginRequest(uId, uPass);
-        call.enqueue(new Callback<User>() {
+        Call<Petugas> call = apiInterface.loginRequest(uId, uPass);
+        call.enqueue(new Callback<Petugas>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
+            public void onResponse(Call<Petugas> call, Response<Petugas> response) {
                 if(response.body() != null) {
                     sessionManager.createSession(uId);
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -76,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
+            public void onFailure(Call<Petugas> call, Throwable t) {
                 Toast.makeText(LoginActivity.this, ""+t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

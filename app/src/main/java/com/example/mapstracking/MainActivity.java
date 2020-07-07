@@ -11,7 +11,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.mapstracking.Service.LocationService;
+import com.example.mapstracking.Service.TrackingService;
 import com.example.mapstracking.userHandler.SessionManager;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
@@ -83,8 +83,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private PendingIntent getPendingIntent() {
-        intent = new Intent(this, LocationService.class);
-        intent.setAction(LocationService.ACTION_PROCESS_UPDATE);
+        intent = new Intent(this, TrackingService.class);
+        intent.setAction(TrackingService.ACTION_PROCESS_UPDATE);
         return PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 

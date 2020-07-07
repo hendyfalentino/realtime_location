@@ -24,7 +24,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <receiver
-            android:name=".Service.LocationService"/>
+            android:name=".Service.TrackingService"/>
 
         <activity android:name=".FormActivity" />
         <!--

@@ -15,7 +15,7 @@ public class SessionManager {
     int PRIVATE_MODE = 0 ;
     private static final String PREF_NAME = "LOGIN";
     private static final String LOGIN = "IS_LOGIN";
-    public static String user_id = "user_id";
+    public static String id_petugas = "id_petugas";
 
     public SessionManager(Context context) {
         this.context = context;
@@ -23,9 +23,9 @@ public class SessionManager {
         editor = sharedPreferences.edit();
     }
 
-    public void createSession(String user_id){
+    public void createSession(String id_petugas){
         editor.putBoolean("LOGIN", true);
-        editor.putString("user_id", user_id);
+        editor.putString("id_petugas", id_petugas);
         editor.apply();
     }
 
@@ -43,7 +43,7 @@ public class SessionManager {
 
     public HashMap<String, String> getUserDetail(){
         HashMap<String, String> user = new HashMap<>();
-        user.put(user_id, sharedPreferences.getString(user_id, null));
+        user.put(id_petugas, sharedPreferences.getString(id_petugas, null));
         return user;
     }
 
