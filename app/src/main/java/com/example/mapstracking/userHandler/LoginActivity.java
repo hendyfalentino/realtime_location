@@ -2,6 +2,7 @@ package com.example.mapstracking.userHandler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -58,6 +59,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void Login(){
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.show();
         uId = id_petugas.getText().toString();
         uPass = password_petugas.getText().toString().trim();
         apiInterface = ApiClient.getRetrofitInstance().create(ApiInterface.class);
@@ -67,6 +70,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<Petugas> call, Response<Petugas> response) {
                 if(response.body() != null) {
                     sessionManager.createSession(uId);
+                    progressDialog.cancel();
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
