@@ -1,6 +1,7 @@
 package com.example.mapstracking.API;
 
 import com.example.mapstracking.Model.Mapping;
+import com.example.mapstracking.Model.Nasabah;
 import com.example.mapstracking.Model.Petugas;
 
 import java.util.List;
@@ -39,6 +40,25 @@ public interface ApiInterface {
     Call<ResponseBody> insertSetoran(
             @Query("jumlah_setoran") String jumlah_setoran,
             @Query("deskripsi_setoran") String desktipsi_setoran,
+            @Query("id_petugas") String id_petugas
+    );
+
+    @GET("fetchNasabah.php")
+    Call<List<Nasabah>> fetchNasabah(
+            @Query("like") String like
+    );
+
+    @GET("getDataNasabah.php")
+    Call<Nasabah> getDataNasabah(
+            @Query("id_nasabah") String id_nasabah
+    );
+
+    @GET("insertSetoran.php")
+    Call<ResponseBody> insertSetoran(
+            @Query("id_nasabah") String id_nasabah,
+            @Query("jenis_setoran") String jenis_setoran,
+            @Query("jumlah_setoran") String jumlah_setoran,
+            @Query("deskripsi_setoran") String deskripsi_setoran,
             @Query("id_petugas") String id_petugas
     );
 }

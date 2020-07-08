@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">MapsTracking</string>
     <string name="title_activity_maps">Map</string>
+    <string-array name="jenis_setoran">
+        <item>Angsuran Kredit</item>
+        <item>Angsuran WO</item>
+        <item>Penempatan Deposito</item>
+        <item>Lain - Lain</item>
+    </string-array>
 </resources>

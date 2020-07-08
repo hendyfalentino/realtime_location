@@ -6,6 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".SetoranActivity">
 
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progress_bar_setoran"
+        android:layout_centerInParent="true"
+        android:visibility="invisible"/>
+
     <TextView
         android:layout_marginTop="20pt"
         android:id="@+id/tv_Form"
@@ -13,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:textSize="30sp"
-        android:text="Form"/>
+        android:text="Form Setoran"/>
 
     <RelativeLayout
         android:layout_below="@id/tv_Form"
@@ -24,15 +31,57 @@
         android:layout_marginRight="20dp"
         android:layout_marginEnd="20dp">
 
-        <EditText
-            android:id="@+id/test"
-            android:layout_marginTop="10pt"
+        <TextView
+            android:id="@+id/tv_nama_nasabah_setoran"
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
-            android:hint="Test"
-            android:autofillHints="Test" />
+            android:textSize="20sp"
+            android:text="Nama Nasabah"/>
 
+        <Spinner
+            android:id="@+id/jenis_setoran"
+            android:layout_below="@id/tv_nama_nasabah_setoran"
+            android:layout_marginTop="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/jenis_setoran"/>
+
+        <TextView
+            android:id="@+id/tv_rp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/jenis_setoran"
+            android:layout_marginTop="25dp"
+            android:text="Rp  "
+            android:textSize="25sp"/>
+
+        <EditText
+            android:layout_toRightOf="@id/tv_rp"
+            android:id="@+id/et_jumlah_setoran"
+            android:inputType="number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/jenis_setoran"
+            android:layout_marginTop="20dp"
+            android:hint="Jumlah Setoran"/>
+
+        <EditText
+            android:id="@+id/et_deskripsi_setoran"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/et_jumlah_setoran"
+            android:layout_marginTop="20dp"
+            android:hint="Deskripsi Setoran"/>
+
+        <Button
+            android:id="@+id/btn_input_setoran"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/et_deskripsi_setoran"
+            android:layout_marginTop="30dp"
+            android:text="Input Setoran"
+            android:layout_centerHorizontal="true"/>
 
     </RelativeLayout>
 

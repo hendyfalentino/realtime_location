@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     SessionManager sessionManager;
     Intent intent;
-    Button btn_map, btn_logout, btn_form;
+    Button btn_map, btn_logout, btn_nasabah, btn_form;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
         updateLocation();
 
         btn_map = findViewById(R.id.btn_map);
+        btn_nasabah = findViewById(R.id.btn_nasabah);
+        btn_form = findViewById(R.id.btn_form);
         btn_logout = findViewById(R.id.btn_logout);
 
         btn_map.setOnClickListener(new View.OnClickListener() {
@@ -62,11 +64,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btn_form = findViewById(R.id.btn_form);
+        btn_nasabah.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, NasabahActivity.class);
+                intent.putExtra("menu", "nasabah");
+                startActivity(intent);
+            }
+        });
+
         btn_form.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, SetoranActivity.class);
+                Intent intent = new Intent(MainActivity.this, NasabahActivity.class);
+                intent.putExtra("menu", "form");
                 startActivity(intent);
             }
         });
