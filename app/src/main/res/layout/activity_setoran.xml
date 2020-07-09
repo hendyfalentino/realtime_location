@@ -58,19 +58,20 @@
 
         <EditText
             android:layout_toRightOf="@id/tv_rp"
-            android:id="@+id/et_jumlah_setoran"
+            android:id="@+id/et_jumlah"
             android:inputType="number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/jenis_setoran"
             android:layout_marginTop="20dp"
-            android:hint="Jumlah Setoran"/>
+            android:hint="Jumlah Setoran"
+            android:layout_toEndOf="@id/tv_rp" />
 
         <EditText
-            android:id="@+id/et_deskripsi_setoran"
+            android:id="@+id/et_deskripsi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/et_jumlah_setoran"
+            android:layout_below="@id/et_jumlah"
             android:layout_marginTop="20dp"
             android:hint="Deskripsi Setoran"/>
 
@@ -78,7 +79,7 @@
             android:id="@+id/btn_input_setoran"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/et_deskripsi_setoran"
+            android:layout_below="@id/et_deskripsi"
             android:layout_marginTop="30dp"
             android:text="Input Setoran"
             android:layout_centerHorizontal="true"/>

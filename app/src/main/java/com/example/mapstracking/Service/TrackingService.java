@@ -4,16 +4,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.example.mapstracking.API.ApiClient;
 import com.example.mapstracking.API.ApiInterface;
-import com.example.mapstracking.MainActivity;
 import com.example.mapstracking.userHandler.SessionManager;
 import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.LatLng;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -29,7 +24,6 @@ public class TrackingService extends BroadcastReceiver {
     double currentLongitude;
     double lastLatitude;
     double lastLongitude;
-    LatLng latLng;
     ApiInterface apiInterface;
     String id_petugas;
 
@@ -46,14 +40,11 @@ public class TrackingService extends BroadcastReceiver {
                 LocationResult result = LocationResult.extractResult(intent);
                 if(result != null){
                     Location location = result.getLastLocation();
-                    currentLatitude = location.getLatitude();
-                    currentLatitude = Double.parseDouble(new DecimalFormat("##.####").format(currentLatitude));
-                    currentLongitude = location.getLongitude();
-                    currentLongitude = Double.parseDouble(new DecimalFormat("##.####").format(currentLongitude));
-                    latLng = new LatLng(currentLatitude,currentLongitude);
+                    currentLatitude = Double.parseDouble(new DecimalFormat("##.####").format(location.getLatitude()));
+                    currentLongitude = Double.parseDouble(new DecimalFormat("##.####").format(location.getLongitude()));
                     if (lastLatitude == 0.0d && lastLongitude == 0.0d ){
                         saveLocation(id_petugas);
-                    } else if (currentLatitude != lastLatitude && currentLongitude != lastLongitude) {
+                    } else if (getDistance(currentLatitude, currentLongitude, lastLatitude, lastLongitude) > 5) {
                         saveLocation(id_petugas);
                     }
                 }
@@ -61,6 +52,19 @@ public class TrackingService extends BroadcastReceiver {
                 lastLongitude = currentLongitude;
             }
         }
+    }
+
+    private float getDistance(double Latitude1, double Longitude1, double Latitude2, double Longitude2) {
+        Location location1 = new Location("location1");
+        Location location2 = new Location("location2");
+
+        location1.setLatitude(Latitude1);
+        location1.setLongitude(Longitude1);
+
+        location2.setLatitude(Latitude2);
+        location2.setLongitude(Longitude2);
+
+        return location1.distanceTo(location2);
     }
 
     public void saveLocation(String uId){

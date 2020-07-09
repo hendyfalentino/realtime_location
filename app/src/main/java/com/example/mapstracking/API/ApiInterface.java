@@ -36,13 +36,6 @@ public interface ApiInterface {
             @Query("id_mapping") String id_mapping
     );
 
-    @GET("insertSetoran.php")
-    Call<ResponseBody> insertSetoran(
-            @Query("jumlah_setoran") String jumlah_setoran,
-            @Query("deskripsi_setoran") String desktipsi_setoran,
-            @Query("id_petugas") String id_petugas
-    );
-
     @GET("fetchNasabah.php")
     Call<List<Nasabah>> fetchNasabah(
             @Query("like") String like
@@ -60,5 +53,10 @@ public interface ApiInterface {
             @Query("jumlah_setoran") String jumlah_setoran,
             @Query("deskripsi_setoran") String deskripsi_setoran,
             @Query("id_petugas") String id_petugas
+    );
+
+    @GET("getNasabah.php")
+    Call<Nasabah> getNasabah(
+            @Query("id_mapping") String id_mapping
     );
 }

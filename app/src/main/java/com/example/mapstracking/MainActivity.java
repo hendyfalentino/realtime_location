@@ -1,7 +1,9 @@
 package com.example.mapstracking;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.PendingIntent;
@@ -17,9 +19,13 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
     static MainActivity instance;
+
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+
+    private boolean permissionDenied = false;
 
     LocationRequest locationRequest;
     FusedLocationProviderClient fusedLocationProviderClient;
@@ -85,12 +91,47 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateLocation() {
-        buildLocationRequest();
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            buildLocationRequest();
+            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+            fusedLocationProviderClient.requestLocationUpdates(locationRequest, getPendingIntent());
+        } else {
+            // Permission to access the location is missing. Show rationale and request permission
+            PermissionUtils.requestPermission(this, LOCATION_PERMISSION_REQUEST_CODE,
+                    Manifest.permission.ACCESS_FINE_LOCATION, true);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode != LOCATION_PERMISSION_REQUEST_CODE) {
             return;
         }
-        fusedLocationProviderClient.requestLocationUpdates(locationRequest, getPendingIntent());
+
+        if (PermissionUtils.isPermissionGranted(permissions, grantResults, Manifest.permission.ACCESS_FINE_LOCATION)) {
+            // Enable the my location layer if the permission has been granted.
+            updateLocation();
+        } else {
+            // Permission was denied. Display an error message
+            // Display the missing permission error dialog when the fragments resume.
+            permissionDenied = true;
+        }
+    }
+
+    @Override
+    protected void onResumeFragments() {
+        super.onResumeFragments();
+        if (permissionDenied) {
+            // Permission was not granted, display error dialog.
+            showMissingPermissionError();
+            permissionDenied = false;
+        }
+    }
+
+    private void showMissingPermissionError() {
+        PermissionUtils.PermissionDeniedDialog
+                .newInstance(true).show(getSupportFragmentManager(), "dialog");
     }
 
     private PendingIntent getPendingIntent() {

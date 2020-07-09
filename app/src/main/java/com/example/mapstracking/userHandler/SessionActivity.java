@@ -1,13 +1,12 @@
 package com.example.mapstracking.userHandler;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.mapstracking.MainActivity;
-import com.example.mapstracking.MapsActivity;
 import com.example.mapstracking.R;
 
 public class SessionActivity extends AppCompatActivity {

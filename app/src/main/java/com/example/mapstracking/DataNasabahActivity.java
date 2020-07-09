@@ -1,7 +1,5 @@
 package com.example.mapstracking;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,11 +9,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.mapstracking.API.ApiClient;
 import com.example.mapstracking.API.ApiInterface;
 import com.example.mapstracking.Model.Nasabah;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -71,6 +70,11 @@ public class DataNasabahActivity extends AppCompatActivity {
             public void onResponse(Call<Nasabah> call, Response<Nasabah> response) {
                 if(response.body() != null){
                     progressBar.setVisibility(View.GONE);
+                    tv_nama.setVisibility(View.VISIBLE);
+                    tv_ttl.setVisibility(View.VISIBLE);
+                    tv_ktp.setVisibility(View.VISIBLE);
+                    tv_ibu_kandung.setVisibility(View.VISIBLE);
+                    tv_alamat.setVisibility(View.VISIBLE);
                     tv_nama.setText(response.body().getNama_nasabah());
                     String ttl = response.body().getTempat_lahir_nasabah() + ", " + response.body().getTanggal_lahir_nasabah();
                     tv_ttl.setText(ttl);

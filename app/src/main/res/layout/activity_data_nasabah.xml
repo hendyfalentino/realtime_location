@@ -23,7 +23,8 @@
         android:layout_height="wrap_content"
         android:text="Nama Nasabah"
         android:textSize="20sp"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"/>
 
     <TextView
         android:id="@+id/tv_ttl"
@@ -33,7 +34,8 @@
         android:layout_height="wrap_content"
         android:text="Tempat Tanggal Lahir"
         android:textSize="20sp"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"/>
 
     <TextView
         android:id="@+id/tv_ktp"
@@ -43,7 +45,8 @@
         android:layout_height="wrap_content"
         android:text="KTP"
         android:textSize="20sp"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"/>
 
     <TextView
         android:id="@+id/tv_ibu_kandung"
@@ -53,7 +56,8 @@
         android:layout_height="wrap_content"
         android:text="Nama Ibu Kandung"
         android:textSize="20sp"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"/>
 
     <TextView
         android:id="@+id/tv_alamat"
@@ -63,7 +67,8 @@
         android:layout_height="wrap_content"
         android:text="Alamat"
         android:textSize="20sp"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"/>
 
     <Button
         android:id="@+id/btn_setoran"

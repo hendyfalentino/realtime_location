@@ -1,25 +1,23 @@
 package com.example.mapstracking;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.mapstracking.API.ApiClient;
 import com.example.mapstracking.API.ApiInterface;
 import com.example.mapstracking.Adapter.ListNasabahAdapter;
 import com.example.mapstracking.Model.Nasabah;
-import com.example.mapstracking.userHandler.LoginActivity;
 
 import java.util.List;
 
