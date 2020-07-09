@@ -68,7 +68,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void run() {
                 getCurrentLocation();
-                handler.postDelayed(this, 100);
+                handler.postDelayed(this, 1000);
             }
         };
         handler.post(run);
@@ -157,8 +157,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             .tilt(45)
                             .build();
                     if (lastLatitude == 0.0d && lastLongitude == 0.0d ){
-                        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                    } else {//if (getDistance(currentLatitude, currentLongitude, lastLatitude, lastLongitude) > 10){
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,17));
+                    } else if (getDistance(currentLatitude, currentLongitude, lastLatitude, lastLongitude) > 5){
                         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                     }
                 }
