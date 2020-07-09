@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Bank Prisma Dana</string>
+    <string name="app_name">Prisma Dana</string>
     <string name="title_activity_maps">Map</string>
     <string-array name="jenis_setoran">
         <item>Angsuran Kredit</item>

@@ -24,13 +24,13 @@ public class SessionManager {
     }
 
     public void createSession(String id_petugas){
-        editor.putBoolean("LOGIN", true);
+        editor.putBoolean(LOGIN, true);
         editor.putString("id_petugas", id_petugas);
         editor.apply();
     }
 
     public boolean isLogIn(){
-        return sharedPreferences.getBoolean("LOGIN", false);
+        return sharedPreferences.getBoolean(LOGIN, false);
     }
 
     public void checkLogIn(){
