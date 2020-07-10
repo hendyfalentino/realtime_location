@@ -22,6 +22,7 @@
     <string name="nasabah">Nasabah</string>
     <string name="map">Map</string>
     <string name="logout">Logout</string>
+    <string name="nomor">Nomor</string>
     <string-array name="jenis_setoran">
         <item>Angsuran Kredit</item>
         <item>Angsuran WO</item>

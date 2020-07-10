@@ -85,7 +85,8 @@
         android:layout_toEndOf="@id/password_icon"
         android:autofillHints="@string/password"
         android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp" />
+        android:layout_marginStart="10dp"
+        app:passwordToggleEnabled="true"/>
 
     <Button
         android:id="@+id/btn_login"

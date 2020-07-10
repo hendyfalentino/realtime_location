@@ -71,16 +71,28 @@
         android:layout_centerHorizontal="true"
         android:visibility="invisible"/>
 
+    <TextView
+        android:id="@+id/tv_nomor"
+        android:layout_below="@id/tv_alamat"
+        android:layout_marginTop="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/nomor"
+        android:textSize="20sp"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"/>
+
     <Button
         android:id="@+id/btn_setoran"
         android:layout_marginTop="20dp"
-        android:layout_below="@id/tv_alamat"
+        android:layout_below="@id/tv_nomor"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="@string/setoran"
         android:textSize="18sp"
         android:textColor="@color/gmm_white"
         android:background="@drawable/rounded_button"
+        android:visibility="invisible"
         android:layout_centerHorizontal="true"/>
 
     <ProgressBar

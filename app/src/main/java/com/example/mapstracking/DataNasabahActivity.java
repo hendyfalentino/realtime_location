@@ -22,7 +22,7 @@ import retrofit2.Response;
 public class DataNasabahActivity extends AppCompatActivity {
 
     Button btn_setoran;
-    TextView tv_nama, tv_ttl, tv_ktp, tv_ibu_kandung, tv_alamat;
+    TextView tv_nama, tv_ttl, tv_ktp, tv_ibu_kandung, tv_alamat, tv_nomor;
     ApiInterface apiInterface;
     ProgressBar progressBar;
 
@@ -38,6 +38,7 @@ public class DataNasabahActivity extends AppCompatActivity {
         tv_ktp = findViewById(R.id.tv_ktp);
         tv_ibu_kandung = findViewById(R.id.tv_ibu_kandung);
         tv_alamat = findViewById(R.id.tv_alamat);
+        tv_nomor = findViewById(R.id.tv_nomor);
 
         Intent intent = getIntent();
         final String id_nasabah = intent.getStringExtra("id_nasabah");
@@ -75,12 +76,14 @@ public class DataNasabahActivity extends AppCompatActivity {
                     tv_ktp.setVisibility(View.VISIBLE);
                     tv_ibu_kandung.setVisibility(View.VISIBLE);
                     tv_alamat.setVisibility(View.VISIBLE);
+                    tv_nomor.setVisibility(View.VISIBLE);
                     tv_nama.setText(response.body().getNama_nasabah());
                     String ttl = response.body().getTempat_lahir_nasabah() + ", " + response.body().getTanggal_lahir_nasabah();
                     tv_ttl.setText(ttl);
                     tv_ktp.setText(response.body().getKtp_nasabah());
                     tv_ibu_kandung.setText(response.body().getIbu_kandung_nasabah());
                     tv_alamat.setText(response.body().getAlamat_nasabah());
+                    tv_nomor.setText(response.body().getNomor_nasabah());
                 }
             }
 
@@ -88,7 +91,7 @@ public class DataNasabahActivity extends AppCompatActivity {
             public void onFailure(Call<Nasabah> call, Throwable t) {
                 progressBar.setVisibility(View.GONE);
                 Toast.makeText(DataNasabahActivity.this, "Tidak dapat terhubung ke server.", Toast.LENGTH_SHORT).show();
-                Log.d("getData", t.getMessage());
+                Log.d("getData", String.valueOf(t.getCause()));
             }
         });
     }
