@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/LightBlue"
     tools:context=".DataNasabahActivity">
 
     <TextView
         android:id="@+id/header"
-        android:layout_marginTop="40dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Data Nasabah"
-        android:textSize="40sp"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:text="@string/data_nasabah"
+        android:textColor="@color/maps_floorpicker_black"
+        android:textSize="40sp" />
 
     <TextView
         android:id="@+id/tv_nama"
@@ -21,7 +22,7 @@
         android:layout_marginTop="30dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nama Nasabah"
+        android:text="@string/nama_nasabah"
         android:textSize="20sp"
         android:layout_centerHorizontal="true"
         android:visibility="invisible"/>
@@ -32,7 +33,7 @@
         android:layout_marginTop="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tempat Tanggal Lahir"
+        android:text="@string/tempat_tanggal_lahir"
         android:textSize="20sp"
         android:layout_centerHorizontal="true"
         android:visibility="invisible"/>
@@ -43,7 +44,7 @@
         android:layout_marginTop="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="KTP"
+        android:text="@string/ktp"
         android:textSize="20sp"
         android:layout_centerHorizontal="true"
         android:visibility="invisible"/>
@@ -54,7 +55,7 @@
         android:layout_marginTop="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nama Ibu Kandung"
+        android:text="@string/nama_ibu_kandung"
         android:textSize="20sp"
         android:layout_centerHorizontal="true"
         android:visibility="invisible"/>
@@ -65,7 +66,7 @@
         android:layout_marginTop="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Alamat"
+        android:text="@string/alamat"
         android:textSize="20sp"
         android:layout_centerHorizontal="true"
         android:visibility="invisible"/>
@@ -74,10 +75,12 @@
         android:id="@+id/btn_setoran"
         android:layout_marginTop="20dp"
         android:layout_below="@id/tv_alamat"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="Setoran"
-        android:visibility="invisible"
+        android:text="@string/setoran"
+        android:textSize="18sp"
+        android:textColor="@color/gmm_white"
+        android:background="@drawable/rounded_button"
         android:layout_centerHorizontal="true"/>
 
     <ProgressBar

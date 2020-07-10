@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/LightBlue"
     android:padding="20dp">
 
     <SearchView
@@ -16,7 +17,6 @@
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_below="@+id/search"
             android:id="@+id/rv_nasabah"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

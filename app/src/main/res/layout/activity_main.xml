@@ -3,37 +3,109 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/LightBlue"
     tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/logo_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/logo"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/nothing" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/menu_utama"
+        android:textColor="@color/maps_floorpicker_black"
+        android:layout_below="@id/logo_main"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="25sp"/>
 
     <Button
         android:id="@+id/btn_map"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_toLeftOf="@id/btn_nasabah"
+        android:background="@drawable/map"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="250dp"
+        android:layout_toStartOf="@id/btn_nasabah" />
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_above="@id/btn_nasabah"
-        android:text="Map"/>
+        android:text="@string/map"
+        android:layout_toLeftOf="@id/tv_nasabah"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="345dp"
+        tools:ignore="RelativeOverlap"
+        android:layout_marginRight="85dp"
+        android:layout_toStartOf="@id/tv_nasabah"
+        android:layout_marginEnd="85dp" />
 
     <Button
         android:id="@+id/btn_nasabah"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/nasabah"
+        android:layout_marginTop="250dp"
+        android:layout_marginLeft="25dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="25dp" />
+
+    <TextView
+        android:id="@+id/tv_nasabah"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Nasabah" />
+        android:text="@string/nasabah"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="335dp"
+        tools:ignore="RelativeOverlap" />
 
     <Button
         android:id="@+id/btn_form"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginLeft="25dp"
+        android:layout_toRightOf="@id/btn_nasabah"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/setoran"
+        android:layout_marginTop="250dp"
+        android:layout_toEndOf="@id/btn_nasabah"
+        android:layout_marginStart="25dp" />
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/btn_nasabah"
-        android:layout_centerInParent="true"
-        android:text="Form" />
+        android:text="@string/setoran"
+        android:layout_toRightOf="@id/tv_nasabah"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="350dp"
+        tools:ignore="RelativeOverlap"
+        android:layout_toEndOf="@id/tv_nasabah"
+        android:layout_marginLeft="75dp"
+        android:layout_marginStart="75dp" />
 
     <Button
         android:id="@+id/btn_logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="50dp"
         android:layout_below="@id/btn_form"
         android:layout_centerInParent="true"
-        android:text="Logout" />
+        android:background="@drawable/logout"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/logout"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/btn_logout"
+        android:layout_marginTop="5dp"
+        tools:ignore="RelativeOverlap" />
 
 </RelativeLayout>

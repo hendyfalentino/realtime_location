@@ -44,7 +44,7 @@ public class TrackingService extends BroadcastReceiver {
                     currentLongitude = Double.parseDouble(new DecimalFormat("##.####").format(location.getLongitude()));
                     if (lastLatitude == 0.0d && lastLongitude == 0.0d ){
                         saveLocation(id_petugas);
-                    } else if (getDistance(currentLatitude, currentLongitude, lastLatitude, lastLongitude) > 5) {
+                    } else if (getDistance(currentLatitude, currentLongitude, lastLatitude, lastLongitude) > 2) {
                         saveLocation(id_petugas);
                     }
                 }

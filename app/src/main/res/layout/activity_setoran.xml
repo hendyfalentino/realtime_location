@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/LightBlue"
     tools:context=".SetoranActivity">
 
     <ProgressBar
@@ -20,7 +20,8 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:textSize="30sp"
-        android:text="Form Setoran"/>
+        android:textColor="@color/maps_floorpicker_black"
+        android:text="@string/form_setoran"/>
 
     <RelativeLayout
         android:layout_below="@id/tv_Form"
@@ -37,7 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:text="Nama Nasabah"/>
+            android:text="@string/nama_nasabah"/>
 
         <Spinner
             android:id="@+id/jenis_setoran"
@@ -53,8 +54,10 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/jenis_setoran"
             android:layout_marginTop="25dp"
-            android:text="Rp  "
-            android:textSize="25sp"/>
+            android:text="@string/rp"
+            android:textSize="25sp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp" />
 
         <EditText
             android:layout_toRightOf="@id/tv_rp"
@@ -64,8 +67,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/jenis_setoran"
             android:layout_marginTop="20dp"
-            android:hint="Jumlah Setoran"
-            android:layout_toEndOf="@id/tv_rp" />
+            android:hint="@string/jumlah_setoran"
+            android:layout_toEndOf="@id/tv_rp"
+            android:autofillHints="@string/jumlah_setoran" />
 
         <EditText
             android:id="@+id/et_deskripsi"
@@ -73,15 +77,20 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/et_jumlah"
             android:layout_marginTop="20dp"
-            android:hint="Deskripsi Setoran"/>
+            android:hint="@string/deskripsi_setoran"
+            android:autofillHints="@string/deskripsi_setoran"
+            android:inputType="text" />
 
         <Button
             android:id="@+id/btn_input_setoran"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/et_deskripsi"
             android:layout_marginTop="30dp"
-            android:text="Input Setoran"
+            android:text="@string/input_setoran"
+            android:textSize="18sp"
+            android:textColor="@color/gmm_white"
+            android:background="@drawable/rounded_button"
             android:layout_centerHorizontal="true"/>
 
     </RelativeLayout>

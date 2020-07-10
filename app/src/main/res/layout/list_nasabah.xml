@@ -10,7 +10,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:orientation="vertical"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp">
@@ -19,7 +19,7 @@
             android:id="@+id/tv_nama_nasabah"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nama Nasabah"
+            android:text="@string/nama_nasabah"
             android:textSize="16sp"/>
 
         <TextView
@@ -27,7 +27,7 @@
             android:layout_marginTop="4dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tempat Tanggal Lahir"
+            android:text="@string/tempat_tanggal_lahir"
             android:textSize="13sp"/>
 
         <TextView
@@ -35,7 +35,8 @@
             android:layout_marginTop="4dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nomor KTP"
+            android:text="@string/nomor_ktp"
+            android:layout_marginBottom="5dp"
             android:textSize="13sp"/>
 
     </LinearLayout>

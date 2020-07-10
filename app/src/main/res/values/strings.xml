@@ -1,6 +1,27 @@
 <resources>
     <string name="app_name">Prisma Dana</string>
     <string name="title_activity_maps">Map</string>
+    <string name="setoran">Setoran</string>
+    <string name="alamat">Alamat</string>
+    <string name="nama_ibu_kandung">Nama Ibu Kandung</string>
+    <string name="ktp">KTP</string>
+    <string name="tempat_tanggal_lahir">Tempat Tanggal Lahir</string>
+    <string name="data_nasabah">Data Nasabah</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="id">ID</string>
+    <string name="nothing">nothing</string>
+    <string name="menu_utama">Menu Utama</string>
+    <string name="form_setoran">Form Setoran</string>
+    <string name="nama_nasabah">Nama Nasabah</string>
+    <string name="rp">Rp</string>
+    <string name="jumlah_setoran">Jumlah Setoran</string>
+    <string name="deskripsi_setoran">Deskripsi Setoran</string>
+    <string name="input_setoran">Input Setoran</string>
+    <string name="nomor_ktp">Nomor KTP</string>
+    <string name="nasabah">Nasabah</string>
+    <string name="map">Map</string>
+    <string name="logout">Logout</string>
     <string-array name="jenis_setoran">
         <item>Angsuran Kredit</item>
         <item>Angsuran WO</item>
