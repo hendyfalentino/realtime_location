@@ -116,6 +116,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             intent.putExtra("map", "map");
             intent.putExtra("id_marker", markerTitle);
             startActivity(intent);
+            finish();
         }
     }
 

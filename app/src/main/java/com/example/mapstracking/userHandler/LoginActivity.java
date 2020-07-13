@@ -77,11 +77,12 @@ public class LoginActivity extends AppCompatActivity {
                     finish();
                 } else {
                     progressBar.setVisibility(View.GONE);
-                    Toast.makeText(LoginActivity.this, "User tidak ditemukan", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "User tidak ditemukan. Periksa kemnbali ID dan Password anda.", Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
             public void onFailure(Call<Petugas> call, Throwable t) {
+                progressBar.setVisibility(View.GONE);
                 Toast.makeText(LoginActivity.this, "Tidak dapat terhubung ke server.", Toast.LENGTH_SHORT).show();
             }
         });

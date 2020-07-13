@@ -58,6 +58,7 @@ public class DataNasabahActivity extends AppCompatActivity {
                 intent.putExtra("id_nasabah", id_nasabah);
                 intent.putExtra("nama_nasabah", nama_nasabah);
                 startActivity(intent);
+                finish();
             }
         });
     }
