@@ -6,10 +6,23 @@
     android:background="@color/LightBlue"
     android:padding="20dp">
 
+    <Button
+        android:id="@+id/btn_home_nasabah"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/home"
+        android:layout_marginStart="10dp" />
+
     <SearchView
         android:id="@+id/search"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@id/btn_home_nasabah"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/btn_home_nasabah"
+        android:layout_marginStart="5dp" />
 
     <ScrollView
         android:layout_below="@id/search"

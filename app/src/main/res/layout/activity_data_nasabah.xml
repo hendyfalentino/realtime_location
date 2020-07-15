@@ -6,6 +6,15 @@
     android:background="@color/LightBlue"
     tools:context=".DataNasabahActivity">
 
+    <Button
+        android:id="@+id/btn_home_data"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="30dp"
+        android:background="@drawable/home"
+        android:layout_marginStart="30dp"/>
+
     <TextView
         android:id="@+id/header"
         android:layout_width="wrap_content"

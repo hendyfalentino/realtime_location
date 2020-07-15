@@ -34,7 +34,7 @@ public class SetoranActivity extends AppCompatActivity {
     EditText et_jumlah_setoran, et_deskripsi_setoran;
     Spinner spinner;
     String id_nasabah, nama_nasabah, jenis_setoran, jumlah_setoran, deskripsi_setoran, id_petugas, menu, id_mapping;
-    Button btn_input_setoran;
+    Button btn_input_setoran, btn_home_setoran;
     ApiInterface apiInterface;
     Intent intent;
 
@@ -82,6 +82,16 @@ public class SetoranActivity extends AppCompatActivity {
                 jumlah_setoran = et_jumlah_setoran.getText().toString().trim();
                 deskripsi_setoran = et_deskripsi_setoran.getText().toString().trim();
                 insertSetoran(id_nasabah, jenis_setoran, jumlah_setoran, deskripsi_setoran, id_petugas);
+            }
+        });
+
+        btn_home_setoran = findViewById(R.id.btn_home_setoran);
+        btn_home_setoran.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intent = new Intent(SetoranActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
     }

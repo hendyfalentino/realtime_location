@@ -21,7 +21,7 @@ import retrofit2.Response;
 
 public class DataNasabahActivity extends AppCompatActivity {
 
-    Button btn_setoran;
+    Button btn_setoran, btn_home_data;
     TextView tv_nama, tv_ttl, tv_ktp, tv_ibu_kandung, tv_alamat, tv_nomor;
     ApiInterface apiInterface;
     ProgressBar progressBar;
@@ -33,6 +33,7 @@ public class DataNasabahActivity extends AppCompatActivity {
 
         progressBar = findViewById(R.id.progress_bar_data);
         btn_setoran = findViewById(R.id.btn_setoran);
+        btn_home_data = findViewById(R.id.btn_home_data);
         tv_nama = findViewById(R.id.tv_nama);
         tv_ttl = findViewById(R.id.tv_ttl);
         tv_ktp = findViewById(R.id.tv_ktp);
@@ -57,6 +58,15 @@ public class DataNasabahActivity extends AppCompatActivity {
                 Intent intent = new Intent(DataNasabahActivity.this, SetoranActivity.class);
                 intent.putExtra("id_nasabah", id_nasabah);
                 intent.putExtra("nama_nasabah", nama_nasabah);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        btn_home_data.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DataNasabahActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
             }
