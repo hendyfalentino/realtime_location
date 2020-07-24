@@ -2,6 +2,8 @@ package com.example.mapstracking;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,7 +21,10 @@ import com.example.mapstracking.API.ApiInterface;
 import com.example.mapstracking.Model.Nasabah;
 import com.example.mapstracking.userHandler.SessionManager;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.HashMap;
+import java.util.Locale;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -40,6 +45,7 @@ public class SetoranActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setoran);
         progressBar = findViewById(R.id.progress_bar_setoran);
@@ -75,11 +81,14 @@ public class SetoranActivity extends AppCompatActivity {
 
             }
         });
+
+        et_jumlah_setoran.addTextChangedListener(onTextChangedListener());
+
         btn_input_setoran = findViewById(R.id.btn_input_setoran);
         btn_input_setoran.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                jumlah_setoran = et_jumlah_setoran.getText().toString().trim();
+                jumlah_setoran = et_jumlah_setoran.getText().toString().replaceAll(",", "");
                 deskripsi_setoran = et_deskripsi_setoran.getText().toString().trim();
                 insertSetoran(id_nasabah, jenis_setoran, jumlah_setoran, deskripsi_setoran, id_petugas);
             }
@@ -94,6 +103,7 @@ public class SetoranActivity extends AppCompatActivity {
                 finish();
             }
         });
+
     }
 
     private void getNasabah(String id_mapping) {
@@ -155,5 +165,46 @@ public class SetoranActivity extends AppCompatActivity {
             }
 
         });
+    }
+
+    private TextWatcher onTextChangedListener() {
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                et_jumlah_setoran.removeTextChangedListener(this);
+
+                try {
+                    String originalString = s.toString();
+
+                    Long longval;
+                    if (originalString.contains(",")) {
+                        originalString = originalString.replaceAll(",", "");
+                    }
+                    longval = Long.parseLong(originalString);
+
+                    DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+                    formatter.applyPattern("#,###,###,###");
+                    String formattedString = formatter.format(longval);
+
+                    //setting text after format to EditText
+                    et_jumlah_setoran.setText(formattedString);
+                    et_jumlah_setoran.setSelection(et_jumlah_setoran.getText().length());
+                } catch (NumberFormatException nfe) {
+                    nfe.printStackTrace();
+                }
+
+                et_jumlah_setoran.addTextChangedListener(this);
+            }
+        };
     }
 }
