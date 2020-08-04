@@ -9,7 +9,7 @@
     <string name="data_nasabah">Data Nasabah</string>
     <string name="login">Login</string>
     <string name="password">Password</string>
-    <string name="id">ID</string>
+    <string name="id">Username</string>
     <string name="nothing">nothing</string>
     <string name="menu_utama">Menu Utama</string>
     <string name="form_setoran">Form Setoran</string>
@@ -23,6 +23,7 @@
     <string name="map">Map</string>
     <string name="logout">Logout</string>
     <string name="nomor">Nomor</string>
+    <string name="cif_nasabah">Cif Nasabah</string>
 
     <string-array name="jenis_setoran">
         <item>Angsuran Kredit Konsumtif</item>

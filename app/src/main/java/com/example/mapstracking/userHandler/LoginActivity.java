@@ -71,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<Petugas> call, Response<Petugas> response) {
                 if(response.body() != null) {
                     progressBar.setVisibility(View.GONE);
-                    sessionManager.createSession(uId);
+                    sessionManager.createSession(response.body().getid_petugas());
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
