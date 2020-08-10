@@ -7,8 +7,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
-    public static final String BASE_URL = "http://carexports.uk/PrismaDana/";
-    //public static final String BASE_URL = "http://bprpd.online/PrismaDana/";
+    //public static final String BASE_URL = "http://carexports.uk/PrismaDana/";
+    public static final String BASE_URL = "http://bprpd.online/PrismaDana/";
     public static Retrofit retrofit;
 
     public static Retrofit getRetrofitInstance(){

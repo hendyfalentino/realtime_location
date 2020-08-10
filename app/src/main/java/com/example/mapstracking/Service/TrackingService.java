@@ -40,8 +40,9 @@ public class TrackingService extends BroadcastReceiver {
                 LocationResult result = LocationResult.extractResult(intent);
                 if(result != null){
                     Location location = result.getLastLocation();
-                    currentLatitude = Double.parseDouble(new DecimalFormat("##.####").format(location.getLatitude()));
-                    currentLongitude = Double.parseDouble(new DecimalFormat("##.####").format(location.getLongitude()));
+                    currentLatitude = Double.parseDouble(String.valueOf(location.getLatitude()));
+                    currentLongitude = Double.parseDouble(String.valueOf(location.getLongitude()));
+
                     if (lastLatitude == 0.0d && lastLongitude == 0.0d ){
                         saveLocation(id_petugas);
                     } else if (getDistance(currentLatitude, currentLongitude, lastLatitude, lastLongitude) > 2) {

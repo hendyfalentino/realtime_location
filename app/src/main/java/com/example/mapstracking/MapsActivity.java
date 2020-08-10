@@ -148,8 +148,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onSuccess(Location location) {
                 if (location != null){
-                    currentLatitude = Double.parseDouble(new DecimalFormat("##.####").format(location.getLatitude()));
-                    currentLongitude = Double.parseDouble(new DecimalFormat("##.####").format(location.getLongitude()));
+                    currentLatitude = Double.parseDouble(String.valueOf(location.getLatitude()));
+                    currentLongitude = Double.parseDouble(String.valueOf(location.getLongitude()));
                     latLng = new LatLng(currentLatitude, currentLongitude);
                     CameraPosition cameraPosition = new CameraPosition.Builder()
                             .target(latLng)
