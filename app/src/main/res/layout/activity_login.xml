@@ -33,7 +33,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="30dp"
-        android:text="@string/login"
         android:textColor="@color/maps_floorpicker_black"
         android:layout_centerHorizontal="true"
         android:textSize="40sp" />
@@ -55,7 +54,7 @@
         android:layout_marginTop="30dp"
         android:layout_toRightOf="@id/user_icon"
         android:ems="10"
-        android:hint="@string/id"
+        android:hint="Nama Pengguna"
         android:inputType="textPersonName"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_toEndOf="@id/user_icon"
@@ -80,7 +79,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:ems="10"
-        android:hint="@string/password"
+        android:hint="Kata Sandi"
         android:inputType="textPassword"
         android:layout_toEndOf="@id/password_icon"
         android:autofillHints="@string/password"
@@ -98,7 +97,7 @@
         android:layout_centerHorizontal="true"
         android:background="@drawable/rounded_button"
         android:textColor="@color/gmm_white"
-        android:text="@string/login" />
+        android:text="Masuk" />
 
 
 </RelativeLayout>

@@ -105,11 +105,11 @@
 
     <Button
         android:id="@+id/btn_setoran"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="25dp"
         android:layout_below="@id/tv_nomor"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="@string/setoran"
+        android:text="Memasukkan Laporan"
         android:textSize="18sp"
         android:textColor="@color/gmm_white"
         android:background="@drawable/rounded_button"

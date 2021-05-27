@@ -1,5 +1,7 @@
 package com.example.mapstracking;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -88,9 +90,22 @@ public class SetoranActivity extends AppCompatActivity {
         btn_input_setoran.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                jumlah_setoran = et_jumlah_setoran.getText().toString().replaceAll(",", "");
-                deskripsi_setoran = et_deskripsi_setoran.getText().toString().trim();
-                insertSetoran(id_nasabah, jenis_setoran, jumlah_setoran, deskripsi_setoran, id_petugas);
+                AlertDialog.Builder alertDialogue = new AlertDialog.Builder(SetoranActivity.this);
+                alertDialogue.setTitle("Data Sudah Benar?");
+                alertDialogue.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        jumlah_setoran = et_jumlah_setoran.getText().toString().replaceAll(",", "");
+                        deskripsi_setoran = et_deskripsi_setoran.getText().toString().trim();
+                        insertSetoran(id_nasabah, jenis_setoran, jumlah_setoran, deskripsi_setoran, id_petugas);
+                    }
+                });
+                alertDialogue.setNeutralButton("Tidak", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        
+                    }
+                });
+                alertDialogue.show();
             }
         });
 

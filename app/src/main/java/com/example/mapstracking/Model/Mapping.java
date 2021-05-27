@@ -52,4 +52,9 @@ public class Mapping {
 
     @SerializedName("ktp_nasabah") private String ktp_nasabah;
 
+    @SerializedName("jumlah_penagihan") private String jumlah_penagihan;
+
+    public String getJumlah_penagihan() {
+        return jumlah_penagihan;
+    }
 }

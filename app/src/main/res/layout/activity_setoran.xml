@@ -30,7 +30,7 @@
         android:layout_centerHorizontal="true"
         android:textSize="30sp"
         android:textColor="@color/maps_floorpicker_black"
-        android:text="@string/form_setoran"/>
+        android:text="Form Laporan"/>
 
     <RelativeLayout
         android:layout_below="@id/tv_Form"
@@ -76,7 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/jenis_setoran"
             android:layout_marginTop="20dp"
-            android:hint="@string/jumlah_setoran"
+            android:hint="Jumlah"
             android:layout_toEndOf="@id/tv_rp"
             android:autofillHints="@string/jumlah_setoran" />
 
@@ -86,7 +86,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/et_jumlah"
             android:layout_marginTop="20dp"
-            android:hint="@string/deskripsi_setoran"
+            android:hint="Deskripsi Laporan"
             android:autofillHints="@string/deskripsi_setoran"
             android:inputType="text" />
 
@@ -96,7 +96,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/et_deskripsi"
             android:layout_marginTop="30dp"
-            android:text="@string/input_setoran"
+            android:text="Memasukkan Laporan"
             android:textSize="18sp"
             android:textColor="@color/gmm_white"
             android:background="@drawable/rounded_button"

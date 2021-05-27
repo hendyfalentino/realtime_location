@@ -38,8 +38,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -95,7 +97,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public boolean onMarkerClick(final Marker marker) {
 
-        if (getDistance(latLng.latitude, latLng.longitude, marker.getPosition().latitude, marker.getPosition().longitude) < 15){
+        if (getDistance(latLng.latitude, latLng.longitude, marker.getPosition().latitude, marker.getPosition().longitude) < 20){
             if (currentPolyline != null) {
                 currentPolyline.remove();
             }
@@ -111,7 +113,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onInfoWindowClick(Marker marker) {
         String markerTitle = marker.getTitle();
-        if (getDistance(latLng.latitude, latLng.longitude, marker.getPosition().latitude, marker.getPosition().longitude) < 15 && marker.getTag() == "FALSE") {
+        if (getDistance(latLng.latitude, latLng.longitude, marker.getPosition().latitude, marker.getPosition().longitude) < 20 && marker.getTag() == "FALSE") {
             Intent intent = new Intent(MapsActivity.this, SetoranActivity.class);
             intent.putExtra("map", "map");
             intent.putExtra("id_marker", markerTitle);
@@ -197,6 +199,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         currentPolyline = mMap.addPolyline((PolylineOptions) values[0]);
     }
 
+    private String formatRupiah(Double number){
+        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+        formatter.applyPattern("#,###,###,###");
+        return formatter.format(number);
+
+        //Locale localeID = new Locale("in", "ID");
+        //NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
+        //return formatRupiah.format(number);
+    }
+
     public void getDestinationMarker(){
         progressBar.setVisibility(View.VISIBLE);
         HashMap<String, String> user = sessionManager.getUserDetail();
@@ -208,9 +220,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onResponse(Call<List<Mapping>> call, Response<List<Mapping>> response) {
                 if(response.body() != null){
                     int size = response.body().size();
-                    destLoc = new String[size][7];
+                    destLoc = new String[size][8];
                     for(i=0; i<size; i++){
-                        for(j=0 ; j<7; j++){
+                        for(j=0 ; j<8; j++){
                             if(j==0){
                                 destLoc[i][j] = response.body().get(i).getId_mapping();
                             }else if(j==1){
@@ -225,14 +237,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 destLoc[i][j] = response.body().get(i).getTempat_lahir_nasabah() + ", " + response.body().get(i).getTanggal_lahir_nasabah();
                             }else if(j==6){
                                 destLoc[i][j] = response.body().get(i).getKtp_nasabah();
+                            } else if(j==7){
+                                destLoc[i][j] = response.body().get(i).getJumlah_penagihan();
                             }
                         }
                         markers = new Marker[size];
                         destLatLng = new LatLng[size];
                         destLatLng[i] = new LatLng(Double.parseDouble(destLoc[i][1]), Double.parseDouble(destLoc[i][2]));
-                        String snippet = "Nama : "+ destLoc[i][4]+"\n"
-                                +"TTL    : "+ destLoc[i][5]+"\n"
-                                +"KTP    : "+ destLoc[i][6];
+                        String snippet = "Nama     : "+ destLoc[i][4]+"\n"
+                                +"KTP        : "+ destLoc[i][6]+"\n"
+                                +"Tagihan : Rp"+ formatRupiah(Double.valueOf(destLoc[i][7]));
                         if(destLoc[i][3].equals("FALSE")){
                             markers[i] = mMap.addMarker(new MarkerOptions()
                                     .position(destLatLng[i])

@@ -30,6 +30,9 @@ public class Nasabah {
     @SerializedName("nomor_nasabah")
     private String nomor_nasabah;
 
+    @SerializedName("jumlah_penagihan")
+    private String jumlah_penagihan;
+
     public String getId_nasabah() {
         return id_nasabah;
     }
@@ -60,5 +63,9 @@ public class Nasabah {
 
     public String getNomor_nasabah() {
         return nomor_nasabah;
+    }
+
+    public String getJumlah_penagihan() {
+        return jumlah_penagihan;
     }
 }
